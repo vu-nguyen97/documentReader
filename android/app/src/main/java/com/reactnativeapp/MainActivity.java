@@ -29,4 +29,16 @@ public class MainActivity extends ReactActivity {
         // If you opted-in for the New Architecture, we enable the Fabric Renderer.
         DefaultNewArchitectureEntryPoint.getFabricEnabled());
   }
+
+  // @Override
+  // protected void onCreate(@Nullable Bundle savedInstanceState) {
+  //   super.onCreate(savedInstanceState);
+
+  //   try {
+  //     // lazy load Google Cast context
+  //     CastContext.getSharedInstance(this);
+  //   } catch (Exception e) {
+  //     // cast framework not supported
+  //   }
+  // }
 }

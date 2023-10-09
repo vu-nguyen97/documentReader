@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">reactNativeApp</string>
+    <!-- <string name="google_cast_application_id">reactNativeApp</string> -->
 </resources>
