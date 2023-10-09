@@ -1,5 +1,7 @@
 import React, {useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {CastButton, useRemoteMediaClient} from 'react-native-google-cast';
+import Video from 'react-native-video';
 
 export function CastComponent() {
   // This will automatically rerender when client is connected to a device
@@ -25,14 +27,41 @@ export function CastComponent() {
   // This will render native Cast button.
   // When a user presses it, a Cast dialog will prompt them to select a Cast device to connect to.
   return (
-    <CastButton
-      style={{
-        width: 24,
-        height: 24,
-        tintColor: 'black',
-        marginTop: 10,
-        paddingHorizontal: 36,
-      }}
-    />
+    <View>
+      <CastButton
+        style={{
+          width: 24,
+          height: 24,
+          tintColor: 'black',
+          marginTop: 10,
+          paddingHorizontal: 36,
+        }}
+      />
+      <View style={styles.container}>
+        <Video
+          source={{
+            uri: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          }} // Thay đổi URL của video tại đây
+          controls={true}
+          resizeMode="cover"
+          // resizeMode="contain" // Chế độ tỷ lệ khung hình
+          // hideShutterView={true}
+          style={styles.video}
+          // onEnd={() => {}}
+        />
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  video: {
+    width: 300,
+    height: 200,
+  },
+});
