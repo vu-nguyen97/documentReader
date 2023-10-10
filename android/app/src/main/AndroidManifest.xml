@@ -5,6 +5,15 @@
     <uses-sdk
         android:minSdkVersion="21"
         android:targetSdkVersion="28" />
+    
+     <queries>
+      <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <!-- If you don't know the MIME type in advance, set "mimeType" to "*/*". -->
+        <!-- <data android:mimeType="application/pdf" /> -->
+        <data android:mimeType="*/*" />
+      </intent>
+    </queries>
 
     <application
       android:name=".MainApplication"
@@ -28,8 +37,16 @@
       <meta-data
         android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
         android:value="com.reactnative.googlecast.GoogleCastOptionsProvider" />
-      <meta-data
-        android:name="com.reactnative.googlecast.RECEIVER_APPLICATION_ID"
-        android:value="D1386343" />
+      
+      <provider
+        android:name="com.vinzscam.reactnativefileviewer.FileProvider"
+        android:authorities="${applicationId}.provider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+          android:name="android.support.FILE_PROVIDER_PATHS"
+          android:resource="@xml/file_viewer_provider_paths"
+        />
+      </provider>
     </application>
 </manifest>

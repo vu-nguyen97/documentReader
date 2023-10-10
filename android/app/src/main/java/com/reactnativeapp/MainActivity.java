@@ -1,11 +1,19 @@
 package com.reactnativeapp;
 
+import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 
-public class MainActivity extends ReactActivity {
+public class MainActivity extends ReactActivity implements ReactApplication {
+  @Override
+  protected List<ReactPackage> getPackages() {
+    return Arrays.<ReactPackage>asList(
+      new MainReactPackage(), // <---- add comma
+      new RNFSPackage() // <---------- add package
+    );
+  }
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
