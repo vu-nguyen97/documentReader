@@ -10,10 +10,8 @@ import Pdf from 'react-native-pdf';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 
-export function ReadMobileFile() {
+export function ReadMobileFile({callback}: any) {
   const onPress = async () => {
-    var RNFS = require('react-native-fs');
-
     // get a list of files and directories in the main bundle
     RNFS.readDir(RNFS.DocumentDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
       .then(result => {
@@ -32,8 +30,8 @@ export function ReadMobileFile() {
         return 'no file';
       })
       .then(contents => {
-        // log the file contents
-        console.log('contents', contents);
+        console.log('base64 file :>> ', contents);
+        callback && callback(contents);
       })
       .catch(err => {
         console.log('err', err.message, err);
