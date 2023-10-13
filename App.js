@@ -29,7 +29,7 @@ function App() {
     <View style={styles.container}>
       {file ? (
         <Pdf
-          source={{uri: file, cache: true}}
+          source={{uri: file, cache: false}}
           // source={{uri: "http://samples.leanpub.com/thereactnativebook-sample.pdf", cache: true}}
           onLoadComplete={(numberOfPages, filePath) => {
             console.log(`Number of pages: ${numberOfPages}`);
@@ -44,7 +44,8 @@ function App() {
         />
       ) : (
         <ReadMobileFile
-          callback={file => setFile('data:application/pdf;base64,' + file)}
+          callback={file => setFile(file.fileCopyUri)}
+          // callback={file => setFile('data:application/pdf;base64,' + file)}
         />
       )}
     </View>
