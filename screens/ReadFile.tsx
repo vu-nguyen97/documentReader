@@ -7,7 +7,6 @@ import {
   Text,
 } from 'react-native';
 import Pdf from 'react-native-pdf';
-import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {PDFDocument, StandardFonts} from 'pdf-lib';

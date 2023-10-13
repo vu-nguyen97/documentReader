@@ -19,7 +19,6 @@ import {
 } from 'react-native';
 import Pdf from 'react-native-pdf';
 
-import {CastComponent} from './screens/test';
 import {ReadMobileFile} from './screens/ReadFile';
 
 function App() {

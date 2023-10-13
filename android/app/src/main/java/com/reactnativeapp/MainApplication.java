@@ -1,6 +1,5 @@
 package com.reactnativeapp;
 
-// import com.rumax.reactnative.pdfviewer.PDFViewPackage;
 // import com.reactnativedocumentpicker.DocumentPickerPackage;
 import android.app.Application;
 import com.facebook.react.PackageList;
@@ -26,7 +25,6 @@ public class MainApplication extends Application implements ReactApplication {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new PDFViewPackage()); // https://github.com/rumax/react-native-PDFView
           // packages.add(new DocumentPickerPackage()); // https://github.com/rnmods/react-native-document-picker
           return packages;
         }
