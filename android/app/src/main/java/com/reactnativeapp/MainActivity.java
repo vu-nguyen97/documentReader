@@ -1,5 +1,6 @@
 package com.reactnativeapp;
 
+import android.os.Bundle;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.rnfs.RNFSPackage;
@@ -44,15 +45,8 @@ public class MainActivity extends ReactActivity implements ReactApplication {
         DefaultNewArchitectureEntryPoint.getFabricEnabled());
   }
 
-  // @Override
-  // protected void onCreate(@Nullable Bundle savedInstanceState) {
-  //   super.onCreate(savedInstanceState);
-
-  //   try {
-  //     // lazy load Google Cast context
-  //     CastContext.getSharedInstance(this);
-  //   } catch (Exception e) {
-  //     // cast framework not supported
-  //   }
-  // }
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(null);
+  }
 }

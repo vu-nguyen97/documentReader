@@ -86,8 +86,6 @@ export function ReadMobileFile({callback}: any) {
     //   });
   };
 
-  // This will render native Cast button.
-  // When a user presses it, a Cast dialog will prompt them to select a Cast device to connect to.
   return (
     <View
       style={{
