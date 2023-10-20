@@ -1,21 +1,17 @@
 import React, {useEffect} from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import {Dimensions, StyleSheet, View, Text} from 'react-native';
 import Pdf from 'react-native-pdf';
 import RNFS from 'react-native-fs';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {PDFDocument, StandardFonts} from 'pdf-lib';
-import {getPage} from './func';
+import {getPage} from '../func';
+import {Button} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 export function ReadMobileFile({callback}: any) {
   const onPress = async () => {
     try {
-      console.log('DocumentPicker :>> ', DocumentPicker);
+      // console.log('DocumentPicker :>> ', DocumentPicker);
       const res: any = await DocumentPicker.pickSingle({
         type: [types.pdf],
         presentationStyle: 'fullScreen',
@@ -91,14 +87,15 @@ export function ReadMobileFile({callback}: any) {
       style={{
         alignItems: 'center',
         justifyContent: 'center',
-        // backgroundColor: 'red',
         flex: 1,
       }}>
-      <TouchableOpacity
-        onPress={onPress}
-        style={{backgroundColor: 'gray', padding: 20}}>
-        <Text style={{fontSize: 25}}> App </Text>
-      </TouchableOpacity>
+      <Button
+        // icon={() => <Icon name="pdffile1" size={20} />}
+        icon="folder"
+        mode="contained"
+        onPress={onPress}>
+        Select file
+      </Button>
     </View>
   );
 }
