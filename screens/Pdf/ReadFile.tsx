@@ -6,14 +6,30 @@ import DocumentPicker, {types} from 'react-native-document-picker';
 import {PDFDocument, StandardFonts} from 'pdf-lib';
 import {getPage} from '../func';
 import {Button} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/AntDesign';
+import XLSX from 'xlsx';
+
+// import RNHTMLtoPDF from 'react-native-html-to-pdf'
+// import mammoth from 'mammoth';
+// import Icon from 'react-native-vector-icons/AntDesign';
+
+function base64ToArrayBuffer(data: any) {
+  const binaryString = atob(data); // Giải mã data thành chuỗi binary
+  const length = binaryString.length;
+  const bytes = new Uint8Array(length);
+
+  for (let i = 0; i < length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+
+  return bytes.buffer; // Chuyển đổi thành ArrayBuffer
+}
 
 export function ReadMobileFile({callback}: any) {
   const onPress = async () => {
     try {
       // console.log('DocumentPicker :>> ', DocumentPicker);
       const res: any = await DocumentPicker.pickSingle({
-        type: [types.pdf],
+        type: [types.allFiles],
         presentationStyle: 'fullScreen',
         copyTo: 'cachesDirectory',
       });
