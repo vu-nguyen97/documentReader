@@ -1,3 +1,4 @@
 export const HOME = 'Home';
-export const PDF = 'Pdf';
+export const FILE_VIEWER = 'File Viewer';
+export const TOOLS = 'Tools';
 export const SETTINGS = 'Settings';
