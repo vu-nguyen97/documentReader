@@ -34,13 +34,13 @@ export function ReadMobileFile({callback}: any) {
         copyTo: 'cachesDirectory',
       });
 
-      console.log('res :>> ', res);
+      // console.log('res :>> ', res);
       callback && callback(res);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         console.log('User canceled!');
       } else {
-        console.log('????', err);
+        console.log('ReadFile error', err);
       }
     }
   };

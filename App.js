@@ -2,7 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import HomeScreen from './screens/Home/Home';
 import Settings from './screens/Settings/Settings';
-import PdfManagement from './screens/FileViewer/PdfManagement';
+import FileViewer from './screens/FileViewer/FileViewer';
 import Tools from './screens/Tools/Tools';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -63,7 +63,7 @@ function App() {
               headerShown: false,
             })}>
             <Tab.Screen name={HOME} component={HomeScreen} />
-            <Tab.Screen name={FILE_VIEWER} component={PdfManagement} />
+            <Tab.Screen name={FILE_VIEWER} component={FileViewer} />
             <Tab.Screen name={TOOLS} component={Tools} />
             <Tab.Screen name={SETTINGS} component={Settings} />
           </Tab.Navigator>
