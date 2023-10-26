@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {Appbar, Button, RadioButton} from 'react-native-paper';
+import {Appbar, Button, MD2Colors} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 
@@ -8,13 +8,14 @@ const Settings = () => {
   const navigation = useNavigation();
   return (
     <View>
-      <Appbar.Header style={{backgroundColor: '#f7661e'}}>
+      <Appbar.Header style={{backgroundColor: MD2Colors.deepOrange500}}>
         <Appbar.BackAction
+          color={MD2Colors.white}
           onPress={() => {
             navigation.goBack();
           }}
         />
-        <Text style={{fontSize: 20}}>Settings</Text>
+        <Text style={{fontSize: 20, color: MD2Colors.white}}>Settings</Text>
       </Appbar.Header>
 
       <View style={styles.premium}>
