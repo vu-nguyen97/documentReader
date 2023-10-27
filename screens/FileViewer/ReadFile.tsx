@@ -101,7 +101,7 @@ export function ReadMobileFile({callback}: any) {
   return (
     <View
       style={{
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'center',
         flex: 1,
       }}>

@@ -7,8 +7,9 @@ import WordViewer from './Word/WordViewer';
 import ExcelViewer from './Excel/ExcelViewer';
 import ZipViewer from './Zip/ZipViewer';
 import FileNotSupport from './FileNotSupport';
+import AllFile from './AllFile';
 
-export default function FileViewer({navigation}: any) {
+export default function FileViewer(props: any) {
   const [file, setFile] = useState<any>();
 
   useEffect(() => {
@@ -47,8 +48,14 @@ export default function FileViewer({navigation}: any) {
   }
 
   return (
-    <View style={{flex: 1}}>
-      {file ? ViewerComp : <ReadMobileFile callback={setFile} />}
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      {file ? (
+        ViewerComp
+      ) : (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <AllFile {...props} callback={setFile} />
+        </View>
+      )}
     </View>
   );
 }
