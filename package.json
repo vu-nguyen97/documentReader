@@ -13,6 +13,7 @@
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/native-stack": "^6.9.14",
+    "base-64": "^1.0.0",
     "mammoth": "^1.6.0",
     "path": "^0.12.7",
     "pdf-lib": "^1.17.1",
@@ -30,6 +31,7 @@
     "react-native-vector-icons": "^10.0.0",
     "react-native-zip-archive": "^6.1.0",
     "react-navigation": "^5.0.0",
+    "text-encoding": "^0.7.0",
     "util": "^0.12.5",
     "xlsx": "^0.18.5"
   },

@@ -8,9 +8,10 @@ import Pdf from 'react-native-pdf';
 import RNFS from 'react-native-fs';
 import mammoth from 'mammoth';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import {decode} from 'base-64';
 
 function base64ToArrayBuffer(data) {
-  const binaryString = atob(data); // Giải mã data thành chuỗi binary
+  const binaryString = decode(data); // Giải mã data thành chuỗi binary
   const length = binaryString.length;
   const bytes = new Uint8Array(length);
 
