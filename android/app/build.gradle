@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.reactnativeapp"
+    namespace "com.flabs.document.reader"
     defaultConfig {
-        applicationId "com.reactnativeapp"
+        applicationId "com.flabs.document.reader"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

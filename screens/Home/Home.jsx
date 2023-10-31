@@ -10,7 +10,7 @@ const Home = ({navigation}) => {
   const [listPaths, setListPaths] = useState([]);
 
   useEffect(() => {
-    // CachesDirectoryPath = TemporaryDirectoryPath = 6 file = com.reactnativeapp/cache
+    // CachesDirectoryPath = TemporaryDirectoryPath = 6 file = com.flabs.document.reader/cache
     // DocumentDirectoryPath = 1 file: BridgeReactNativeDevBundle.js
     getAllFilesFromDirectory(RNFS.RoamingDirectoryPath)
       .then(allFiles => {
