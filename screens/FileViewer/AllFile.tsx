@@ -1,99 +1,101 @@
-import React from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Text,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, Text, ScrollView, Dimensions} from 'react-native';
 import {Appbar, MD2Colors} from 'react-native-paper';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
 // @ts-ignore
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
-import DocumentPicker, {types} from 'react-native-document-picker';
 import {ReadMobileFile} from './ReadFile';
+import {getFileExtension} from '../../components/common/Helpers/Helpers';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
 
-const items = [
+const FILE_TYPES = {
+  all: 'All Files',
+  favorite: 'Favorite Files',
+};
+
+const ListFiles = [
   {
-    name: 'All Files',
-    amount: '(10)',
+    name: FILE_TYPES.all,
     icon: 'file-alt',
     backgroundColor: 'rgba(216,191,216, 0.6)',
   },
   {
     name: 'Pdf Files',
-    amount: '(5)',
+    format: 'pdf',
     icon: 'file-pdf',
     backgroundColor: 'rgba(224,103,103, 0.6)',
   },
   {
     name: 'Word Files',
-    amount: '(3)',
+    format: 'doc, docx',
     icon: 'file-word',
     backgroundColor: 'rgba(111,151,237, 0.5)',
   },
   {
     name: 'Excel Files',
-    amount: '(1)',
+    format: 'xlsx',
     icon: 'file-excel',
     backgroundColor: 'rgba(159,219,151, 0.5)',
   },
   {
     name: 'Pptx Files',
-    amount: '(0)',
+    format: 'pptx, ppt',
     icon: 'file-powerpoint',
     backgroundColor: 'rgba(255,228,181, 0.7)',
   },
   {
     name: 'Text Files',
-    amount: '(1)',
+    format: 'txt',
     icon: 'file',
     backgroundColor: 'rgba(136,212,247, 0.6)',
   },
   {
     name: 'Screenshot',
-    amount: '(0)',
+    format: 'jpg, png',
     icon: 'file-image',
     backgroundColor: 'rgba(255,250,205, 0.8)',
   },
   {
-    name: 'Favorite Files',
-    amount: '(0)',
+    name: FILE_TYPES.favorite,
     icon: 'kiss-wink-heart',
     backgroundColor: 'rgba(255,192,203, 0.6)',
   },
   {
-    name: 'Tools PDF',
-    amount: '',
+    name: 'Other Files',
+    format: 'rar, zip',
     icon: 'toolbox',
     backgroundColor: 'rgba(65,105,225, 0.4)',
   },
 ];
 
-export default function AllFile({navigation, callback}: any) {
+export default function AllFile({navigation, callback, allFiles}: any) {
   const nav = useNavigation();
-  const filePicker = async () => {
-    try {
-      const res: any = await DocumentPicker.pickSingle({
-        type: [types.allFiles],
-        presentationStyle: 'fullScreen',
-        copyTo: 'cachesDirectory',
-      });
-      callback && callback(res);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        console.log('User canceled!');
-      } else {
-        console.log('????', err);
+  const [fileData, setfileData] = useState<any>(ListFiles);
+
+  useEffect(() => {
+    if (!allFiles?.length) return setfileData(ListFiles);
+
+    let newData: any = [...ListFiles];
+    let totalFiles = 0;
+    allFiles.forEach((filePath: any) => {
+      const fileExtension = getFileExtension(filePath);
+      const index = newData.findIndex(
+        (el: any) => el.format && el.format.includes(fileExtension),
+      );
+
+      if (index !== -1) {
+        const amount = newData[index].amount || 0;
+        newData[index].amount = amount + 1;
+        totalFiles += 1;
       }
-    }
-  };
+    });
+    newData[0].amount = totalFiles;
+    setfileData(newData);
+  }, [allFiles]);
 
   return (
     <ScrollView>
@@ -119,7 +121,7 @@ export default function AllFile({navigation, callback}: any) {
 
       <View>
         <View style={styles.wrapper}>
-          {items.map((item, index) => (
+          {fileData.map((item: any, index: number) => (
             <View key={index} style={styles.columnFileName}>
               <View
                 style={[
@@ -129,7 +131,7 @@ export default function AllFile({navigation, callback}: any) {
                 <Icon2 name={item.icon} size={(screenWidth * 7) / 54} />
               </View>
               <Text style={{fontWeight: 'bold'}}>
-                {item.name} {item.amount}
+                {item.name} ({item.amount || 0})
               </Text>
             </View>
           ))}
