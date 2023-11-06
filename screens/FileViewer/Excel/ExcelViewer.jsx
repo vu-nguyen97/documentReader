@@ -6,7 +6,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Modal,
 } from 'react-native';
 import {Appbar} from 'react-native-paper';
 import XLSX from 'xlsx';
@@ -17,7 +16,7 @@ import Loading from '../../../components/common/Loading/Loading';
 import {LOAD_FILE} from '../../../components/constants/constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-function getHeaderRow(workSheet: any) {
+function getHeaderRow(workSheet) {
   const headers = [];
   const range = XLSX.utils.decode_range(workSheet['!ref'] ?? '');
   const row = 0;
@@ -30,24 +29,26 @@ function getHeaderRow(workSheet: any) {
   return headers;
 }
 
-function readExcelData(workSheet: any, headers: any) {
+function readExcelData(workSheet, headers) {
   const data = [];
   const range = XLSX.utils.decode_range(workSheet['!ref'] ?? '');
   let maxRow = 0;
+  let maxCol = 0;
 
   for (let row = 0; row <= range.e.r; row++) {
     for (let col = 0; col <= range.e.c; col++) {
       const cell = workSheet[XLSX.utils.encode_cell({c: col, r: row})];
       if (cell && cell.t) {
         maxRow = Math.max(maxRow, row);
+        maxCol = Math.max(maxCol, col);
       }
     }
   }
 
-  for (let row = 0; row <= maxRow; row++) {
+  for (let row = 1; row <= maxRow; row++) {
     const rowData = {};
 
-    for (let col = 0; col <= range.e.c; col++) {
+    for (let col = 0; col <= maxCol; col++) {
       const cell = workSheet[XLSX.utils.encode_cell({c: col, r: row})];
 
       if (cell && cell.v !== null && cell.v !== undefined) {
@@ -59,19 +60,18 @@ function readExcelData(workSheet: any, headers: any) {
 
     data.push(rowData);
   }
-  data.shift();
   return data;
 }
 
-export default function ExcelViewer(props: any) {
+export default function ExcelViewer(props) {
   const {handleBack, file} = props;
 
   const [isLoading, setIsLoading] = useState(false);
-  const [tableData, setTableData] = useState<any[]>([]);
-  const [tableHeaders, setTableHeaders] = useState<String[]>([]);
+  const [tableData, setTableData] = useState([]);
+  const [tableHeaders, setTableHeaders] = useState([]);
   const [columnWidths, setColumnWidths] = useState({});
-  const [sheetNumber, setSheetNumber] = useState<any>(0);
-  const [sheetNames, setSheetNames] = useState<any>([]);
+  const [sheetNumber, setSheetNumber] = useState(0);
+  const [sheetNames, setSheetNames] = useState([]);
 
   useEffect(() => {
     if (!file) return;
@@ -102,7 +102,8 @@ export default function ExcelViewer(props: any) {
         ...tableData.map(rowData => String(rowData[index]).length),
         String(header).length,
       );
-      widths[index] = maxWidth * 15;
+      widths[index] = maxWidth * 8;
+      if (widths[index] < 100) widths[index] = 100;
     });
     setColumnWidths(widths);
   }, [tableData]);
@@ -120,7 +121,7 @@ export default function ExcelViewer(props: any) {
           <Appbar.Action icon="magnify" onPress={() => {}} />
           <Appbar.Action icon={MORE_ICON} onPress={openMoreAction} />
         </Appbar.Header>
-        {(tableData.length > 0 || Headers.length > 0) && (
+        {(tableData.length > 0 || tableHeaders.length > 0) && (
           <ScrollView horizontal={true} style={{marginBottom: 40}}>
             <View style={styles.table}>
               <DataTable>
@@ -184,7 +185,7 @@ export default function ExcelViewer(props: any) {
           }}>
           {sheetNames.length > 1 && (
             <View style={styles.sheetButtonRow}>
-              {sheetNames.map((sheetName: any, index: any) =>
+              {sheetNames.map((sheetName, index) =>
                 index == Number(sheetNumber) ? (
                   <TouchableOpacity
                     style={[
@@ -192,14 +193,18 @@ export default function ExcelViewer(props: any) {
                       {borderColor: 'blue', backgroundColor: 'lightblue'},
                     ]}
                     key={index}
-                    onPress={() => (setSheetNumber(index), viewExcelFile)}>
+                    onPress={() => {
+                      setSheetNumber(index);
+                    }}>
                     <Text style={{fontWeight: 'bold'}}>{sheetName}</Text>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
                     style={styles.sheetButton}
                     key={index}
-                    onPress={() => (setSheetNumber(index), viewExcelFile)}>
+                    onPress={() => {
+                      setSheetNumber(index);
+                    }}>
                     <Text style={{fontWeight: 'bold'}}>{sheetName}</Text>
                   </TouchableOpacity>
                 ),
@@ -244,7 +249,7 @@ const styles = StyleSheet.create({
     width: 100,
   },
   cellText: {
-    flexWrap: 'wrap', // Enable text wrapping in cells
+    flexWrap: 'wrap',
   },
   sheetButtonRow: {
     flexDirection: 'row',
