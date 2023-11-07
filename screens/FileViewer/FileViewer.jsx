@@ -19,7 +19,11 @@ const {PermissionModule} = NativeModules;
 
 export default function FileViewer(props) {
   const {navigation} = props;
-  const [file, setFile] = useState();
+  // const [file, setFile] = useState();
+  const [file, setFile] = useState({
+    fileCopyUri: '/storage/emulated/0/Download/WordTest.docx',
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  });
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [initFile, setInitFile] = useState(false);
   const [allFiles, setAllFiles] = useState([]);
@@ -47,13 +51,13 @@ export default function FileViewer(props) {
 
     // CachesDirectoryPath = TemporaryDirectoryPath = 6 file = com.flabs.document.reader/cache
     // DocumentDirectoryPath = 1 file: BridgeReactNativeDevBundle.js
-    getAllFilesFromDirectory(RNFS.ExternalStorageDirectoryPath)
-      .then(allFiles => {
-        setAllFiles(allFiles);
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
+    // getAllFilesFromDirectory(RNFS.ExternalStorageDirectoryPath)
+    //   .then(allFiles => {
+    //     setAllFiles(allFiles);
+    //   })
+    //   .catch(error => {
+    //     console.log('error', error);
+    //   });
   }, [initFile]);
 
   const getAllFilesFromDirectory = async directory => {

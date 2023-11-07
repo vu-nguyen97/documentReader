@@ -14,6 +14,18 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +63,61 @@ public class PermissionModule extends ReactContextBaseJavaModule {
             Toast.makeText(getReactApplicationContext(), "Android version " + SDK_INT + " is not supported yet.", Toast.LENGTH_LONG).show();
         }
     }
+
+    @ReactMethod
+    public void convertDocToPdf() {
+        Toast.makeText(getReactApplicationContext(), "Test convert file", Toast.LENGTH_LONG).show();
+    }
+
+     @ReactMethod
+     public void convertToPDF(String docPath, String pdfPath) {
+         try {
+             // Load the Word document
+             FileInputStream docInputStream = new FileInputStream(new File(docPath));
+             XWPFDocument document = new XWPFDocument(docInputStream);
+
+             // Create a PDF document
+             PDDocument pdfDocument = new PDDocument();
+             PDPage page = new PDPage(PDRectangle.A4);
+             pdfDocument.addPage(page);
+
+             // Create a content stream for the PDF
+             PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page);
+
+             // Iterate through the paragraphs in the Word document and add them to the PDF
+             for (var paragraph : document.getParagraphs()) {
+                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12); // Customize font and size
+                 contentStream.beginText();
+                 contentStream.newLineAtOffset(50, 700); // Adjust X and Y coordinates
+                 contentStream.showText(paragraph.getText());
+                 contentStream.endText();
+             }
+
+             contentStream.close();
+
+             // Save the PDF to a file
+             pdfDocument.save("convertedOutput.pdf");
+
+             // Close the document streams
+             pdfDocument.close();
+             docInputStream.close();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
+
+//    @ReactMethod
+//    public void ConvertToPDF(String docPath, String pdfPath) {
+//        try {
+//            InputStream doc = new FileInputStream(new File(docPath));
+//            XWPFDocument document = new XWPFDocument(doc);
+//            PdfOptions options = PdfOptions.create();
+//            OutputStream out = new FileOutputStream(new File(pdfPath));
+//            PdfConverter.getInstance().convert(getReactApplicationContext(), "", document, out, options);
+//        } catch (IOException ex) {
+//            System.out.println(ex.getMessage());
+//        }
+//    }
 
     @ReactMethod
     public void getPermission(Promise promise) {

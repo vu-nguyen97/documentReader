@@ -28,7 +28,7 @@ function App() {
       <SafeAreaProvider>
         <NavigationContainer>
           <Tab.Navigator
-            initialRouteName={HOME}
+            initialRouteName={FILE_VIEWER}
             screenOptions={({route}) => ({
               tabBarIcon: ({focused, color, size}) => {
                 if (route.name === FILE_VIEWER) {

@@ -110,12 +110,13 @@ android {
         }
     }
     packagingOptions {
-       pickFirst 'lib/x86/libc++_shared.so'
-       pickFirst 'lib/x86_64/libjsc.so'
-       pickFirst 'lib/arm64-v8a/libjsc.so'
-       pickFirst 'lib/arm64-v8a/libc++_shared.so'
-       pickFirst 'lib/x86_64/libc++_shared.so'
-       pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+        pickFirst 'lib/x86/libc++_shared.so'
+        pickFirst 'lib/x86_64/libjsc.so'
+        pickFirst 'lib/arm64-v8a/libjsc.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/x86_64/libc++_shared.so'
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+        exclude("META-INF/DEPENDENCIES")
     }
 }
 
@@ -123,6 +124,32 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-fs')
+    // implementation("fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.pdf:1.0.6")
+    // implementation("fr.opensagres.xdocreport:fr.opensagres.xdocreport.itext.extension:2.0.0")
+    // implementation("com.lowagie:itext:2.1.7")
+    // implementation("org.apache.poi:poi-ooxml-schemas:4.1.2")
+
+    // implementation("org.apache.poi:poi-ooxml:3.7")
+
+    // ChatPGT
+    implementation("org.apache.poi:poi:4.1.2")
+    implementation("org.apache.poi:poi-ooxml:5.2.0")
+    implementation("org.apache.pdfbox:pdfbox:2.0.24")
+
+    // implementation("fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.core:1.0.6")
+    // implementation("fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.pdf:1.0.6")
+    // implementation("fr.opensagres.xdocreport:fr.opensagres.xdocreport.itext.extension:2.0.4")
+    // implementation("com.lowagie:itext:2.1.7")
+
+//     https://www.baeldung.com/pdf-conversions-java
+    // implementation("org.apache.pdfbox:pdfbox-tools:2.0.25")
+    // implementation("net.sf.cssbox:pdf2dom:2.0.1")
+    //  implementation("net.sf.cssbox:pdf2dom-cssbox:2.0.0")
+    //  implementation("com.itextpdf:itextpdf:5.5.10")
+    // implementation("com.itextpdf.tool:xmlworker:5.5.10")
+    // implementation("org.apache.poi:poi-ooxml:3.15")
+    // implementation("org.apache.poi:poi-scratchpad:3.15")
+
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Dimensions, View} from 'react-native';
+import {StyleSheet, Dimensions, View, NativeModules} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import Loading from '../../../components/common/Loading/Loading';
 import {LOAD_FILE} from '../../../components/constants/constants';
@@ -9,6 +9,8 @@ import RNFS from 'react-native-fs';
 import mammoth from 'mammoth';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {decode} from 'base-64';
+
+const {PermissionModule} = NativeModules;
 
 function base64ToArrayBuffer(data) {
   const binaryString = decode(data); // Giải mã data thành chuỗi binary
@@ -24,12 +26,35 @@ function base64ToArrayBuffer(data) {
 
 const convertDocxToPdf = async path => {
   try {
+    console.log('path :>> ', path);
+    const pdfPath = '/storage/emulated/0/Download/ConvertedTest.pdf';
+    console.log('PermissionModule', PermissionModule);
+    const a = PermissionModule.convertToPDF(path, pdfPath);
+    // console.log('???aaa', a);
+  } catch (error) {
+    console.log('error :>> ', error);
+  }
+};
+
+const convertDocxToPdf2 = async path => {
+  try {
+    // console.log('path :>> ', path);
+    // /storage/emulated/0/Download/WordTest.docx
+    //  file:///data/user/0/com.flabs.document.reader/cache/9f442e7f-9823-44b8-9f27-e7cce9d9cc06/WordTest.docx
     // Read the DOCX file
     const data = await RNFS.readFile(path, 'base64');
     const arrayData = base64ToArrayBuffer(data);
 
     // Convert DOCX to HTML
+
     const htmlFile = await mammoth.convertToHtml({arrayBuffer: arrayData});
+    // const htmlFile = await mammoth.convertToHtml({
+    //   path: 'file:///data/user/0/com.flabs.document.reader/cache/9f442e7f-9823-44b8-9f27-e7cce9d9cc06/WordTest.docx',
+    //   // path: '/storage/emulated/0/Download/WordTest.docx',
+    // });
+    console.log('htmlFile :>> ', htmlFile);
+
+    // return;
     const html = htmlFile.value;
 
     // Save the HTML content to a file
@@ -90,9 +115,9 @@ export default function WordViewer(props) {
         onPageChanged={(page, numberOfPages) => {
           // console.log(`Current page: ${page}`);
         }}
-        onError={error => {
-          console.log('load file err', error);
-        }}
+        // onError={error => {
+        //   console.log('load file err', error);
+        // }}
         style={styles.pdf}
       />
     </View>
