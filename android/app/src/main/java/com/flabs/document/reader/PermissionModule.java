@@ -3,23 +3,23 @@ package com.flabs.document.reader;
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,8 +29,49 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tom_roush.pdfbox.pdmodel.PDDocument;
+import com.tom_roush.pdfbox.pdmodel.PDDocumentCatalog;
+import com.tom_roush.pdfbox.pdmodel.PDPage;
+import com.tom_roush.pdfbox.pdmodel.PDPageContentStream;
+import com.tom_roush.pdfbox.pdmodel.encryption.AccessPermission;
+import com.tom_roush.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
+import com.tom_roush.pdfbox.pdmodel.font.PDFont;
+import com.tom_roush.pdfbox.pdmodel.font.PDType1Font;
+import com.tom_roush.pdfbox.pdmodel.graphics.image.JPEGFactory;
+import com.tom_roush.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import com.tom_roush.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import com.tom_roush.pdfbox.pdmodel.interactive.form.PDCheckBox;
+import com.tom_roush.pdfbox.pdmodel.interactive.form.PDComboBox;
+import com.tom_roush.pdfbox.pdmodel.interactive.form.PDField;
+import com.tom_roush.pdfbox.pdmodel.interactive.form.PDListBox;
+import com.tom_roush.pdfbox.pdmodel.interactive.form.PDRadioButton;
+import com.tom_roush.pdfbox.pdmodel.interactive.form.PDTextField;
+import com.tom_roush.pdfbox.rendering.ImageType;
+import com.tom_roush.pdfbox.rendering.PDFRenderer;
+import com.tom_roush.pdfbox.text.PDFTextStripper;
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
+
+import org.apache.poi.wp.usermodel.Paragraph;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFPictureData;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+
+//import org.apache.poi.xwpf.usermodel.XWPFDocument;
+//import org.apache.poi.xwpf.usermodel.XWPFPictureData;
+//import com.itextpdf.text.Document;
+//import com.itextpdf.text.pdf.PdfWriter;
+//import com.itextpdf.text.Image;
+//import com.itextpdf.text.Paragraph;
+//import com.itextpdf.text.pdf.PdfPTable;
+
 public class PermissionModule extends ReactContextBaseJavaModule {
     private static final int EXTERNAL_STORAGE_CODE = 10;
+    File root;
+    AssetManager assetManager;
+    Bitmap pageImage;
 
     @Override
     public String getName() {
@@ -69,41 +110,115 @@ public class PermissionModule extends ReactContextBaseJavaModule {
         Toast.makeText(getReactApplicationContext(), "Test convert file", Toast.LENGTH_LONG).show();
     }
 
+    private void setup() {
+        // Enable Android asset loading
+        PDFBoxResourceLoader.init(getReactApplicationContext());
+        // Find the root of the external storage.
+
+        root = getReactApplicationContext().getCacheDir();
+        assetManager = getReactApplicationContext().getAssets();
+    }
+
      @ReactMethod
-     public void convertToPDF(String docPath, String pdfPath) {
-         try {
-             // Load the Word document
-             FileInputStream docInputStream = new FileInputStream(new File(docPath));
-             XWPFDocument document = new XWPFDocument(docInputStream);
+     public void convertToPDF(String docPath, String pdfPath, Promise promise) {
+//         try {
+//             XWPFDocument document = new XWPFDocument(new FileInputStream(wordFilePath));
+//             Document pdfDocument = new Document();
+//             PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfFilePath));
+//             pdfDocument.open();
+//
+//             for (XWPFParagraph paragraph : document.getParagraphs()) {
+//                 pdfDocument.add(new Paragraph(paragraph.getText()));
+//             }
+//
+//             for (XWPFPictureData pictureData : document.getAllPictures()) {
+//                 byte[] bytes = pictureData.getData();
+//                 Image image = Image.getInstance(bytes);
+//                 pdfDocument.add(image);
+//             }
+//
+//             pdfDocument.close();
+//         } catch (Exception e) {
+//             e.printStackTrace();
+//         }
 
-             // Create a PDF document
-             PDDocument pdfDocument = new PDDocument();
-             PDPage page = new PDPage(PDRectangle.A4);
-             pdfDocument.addPage(page);
 
-             // Create a content stream for the PDF
-             PDPageContentStream contentStream = new PDPageContentStream(pdfDocument, page);
+//         setup();
+//         PDDocument document = new PDDocument();
+//         PDPage page = new PDPage();
+//         document.addPage(page);
+//
+//         PDFont font = PDType1Font.HELVETICA;
+//
+//         PDPageContentStream contentStream;
 
-             // Iterate through the paragraphs in the Word document and add them to the PDF
-             for (var paragraph : document.getParagraphs()) {
-                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12); // Customize font and size
-                 contentStream.beginText();
-                 contentStream.newLineAtOffset(50, 700); // Adjust X and Y coordinates
-                 contentStream.showText(paragraph.getText());
-                 contentStream.endText();
-             }
 
-             contentStream.close();
+//          try {
+//              // Define a content stream for adding to the PDF
+//              contentStream = new PDPageContentStream(document, page);
 
-             // Save the PDF to a file
-             pdfDocument.save("convertedOutput.pdf");
+//              // Write Hello World in blue text
+//              contentStream.beginText();
+//              contentStream.setNonStrokingColor(15, 38, 192);
+//              contentStream.setFont(font, 12);
+//              contentStream.newLineAtOffset(100, 700);
+//              contentStream.showText("Hello World");
+//              contentStream.endText();
 
-             // Close the document streams
-             pdfDocument.close();
-             docInputStream.close();
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
+//              // Load in the images
+// //             InputStream in = assetManager.open("falcon.jpg");
+// //             InputStream alpha = assetManager.open("trans.png");
+
+//              // Draw a green rectangle
+// //             contentStream.addRect(5, 500, 100, 100);
+// //             contentStream.setNonStrokingColor(0, 255, 125);
+// //             contentStream.fill();
+
+//              // Draw the falcon base image
+// //             PDImageXObject ximage = JPEGFactory.createFromStream(document, in);
+// //             contentStream.drawImage(ximage, 20, 20);
+
+//              // Draw the red overlay image
+// //             Bitmap alphaImage = BitmapFactory.decodeStream(alpha);
+// //             PDImageXObject alphaXimage = LosslessFactory.createFromImage(document, alphaImage);
+// //             contentStream.drawImage(alphaXimage, 20, 20 );
+
+//              // Make sure that the content stream is closed:
+//              contentStream.close();
+
+//              // Save the final pdf document to a file
+// //             String path = root.getAbsolutePath() + "/Created.pdf";
+//              String path = "/storage/emulated/0/Download/ConvertedTest.pdf";
+
+//              document.save(path);
+//              document.close();
+
+//              Toast.makeText(getReactApplicationContext(), "Success: path" + path, Toast.LENGTH_LONG).show();
+//              promise.resolve(path);
+//          } catch (IOException e) {
+//              Log.e("PdfBox-Android-Sample", "Exception thrown while creating PDF", e);
+//              Toast.makeText(getReactApplicationContext(), "Faiiiiilllll", Toast.LENGTH_LONG).show();
+//          }
+
+
+//         try {
+//             PDDocument document = new PDDocument();
+//             PDPage page = new PDPage();
+//             document.addPage(page);
+//
+//             PDPageContentStream contentStream = new PDPageContentStream(document, page);
+//
+//             contentStream.setFont(PDType1Font.COURIER, 12);
+//             contentStream.beginText();
+//             contentStream.showText("Hello World");
+//             contentStream.endText();
+//             contentStream.close();
+//
+//             document.save("pdfBoxHelloWorld.pdf");
+//             document.close();
+//         } catch (IOException e) {
+//             e.printStackTrace();
+//         }
      }
 
 //    @ReactMethod

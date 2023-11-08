@@ -51,13 +51,13 @@ export default function FileViewer(props) {
 
     // CachesDirectoryPath = TemporaryDirectoryPath = 6 file = com.flabs.document.reader/cache
     // DocumentDirectoryPath = 1 file: BridgeReactNativeDevBundle.js
-    // getAllFilesFromDirectory(RNFS.ExternalStorageDirectoryPath)
-    //   .then(allFiles => {
-    //     setAllFiles(allFiles);
-    //   })
-    //   .catch(error => {
-    //     console.log('error', error);
-    //   });
+    getAllFilesFromDirectory(RNFS.ExternalStorageDirectoryPath)
+      .then(allFiles => {
+        setAllFiles(allFiles);
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
   }, [initFile]);
 
   const getAllFilesFromDirectory = async directory => {

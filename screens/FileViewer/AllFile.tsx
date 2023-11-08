@@ -78,6 +78,7 @@ export default function AllFile({navigation, callback, allFiles}: any) {
 
   useEffect(() => {
     if (!allFiles?.length) return setfileData(ListFiles);
+    console.log('allFiles :>> ', allFiles);
 
     let newData: any = [...ListFiles];
     let totalFiles = 0;

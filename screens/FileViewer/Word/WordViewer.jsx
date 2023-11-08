@@ -29,8 +29,11 @@ const convertDocxToPdf = async path => {
     console.log('path :>> ', path);
     const pdfPath = '/storage/emulated/0/Download/ConvertedTest.pdf';
     console.log('PermissionModule', PermissionModule);
-    const a = PermissionModule.convertToPDF(path, pdfPath);
-    // console.log('???aaa', a);
+    PermissionModule.convertToPDF(path, pdfPath)
+      .then(res => {
+        console.log('res :>> ', res);
+      })
+      .catch(err => console.log('>>>>> errrr', err));
   } catch (error) {
     console.log('error :>> ', error);
   }

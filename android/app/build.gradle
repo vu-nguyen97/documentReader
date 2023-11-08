@@ -132,9 +132,10 @@ dependencies {
     // implementation("org.apache.poi:poi-ooxml:3.7")
 
     // ChatPGT
-    implementation("org.apache.poi:poi:4.1.2")
-    implementation("org.apache.poi:poi-ooxml:5.2.0")
-    implementation("org.apache.pdfbox:pdfbox:2.0.24")
+    implementation("org.apache.poi:poi:5.2.3")
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
+    implementation("org.apache.pdfbox:pdfbox:3.0.0-RC1")
+    implementation 'com.tom-roush:pdfbox-android:2.0.27.0'
 
     // implementation("fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.core:1.0.6")
     // implementation("fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.pdf:1.0.6")
