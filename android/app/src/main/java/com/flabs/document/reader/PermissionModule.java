@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
+//import android.graphics.fonts.Font;
+//import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -15,10 +16,13 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.shell.MainReactPackage;
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 
 import java.io.BufferedInputStream;
@@ -28,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -71,15 +76,44 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 //import com.itextpdf.text.Paragraph;
 //import com.itextpdf.text.pdf.PdfPTable;
 
-import com.documents4j.api.DocumentType;
-import com.documents4j.api.IConverter;
-import com.documents4j.job.LocalConverter;
-import org.apache.commons.io.output.ByteArrayOutputStream;
+//import com.documents4j.api.DocumentType;
+//import com.documents4j.api.IConverter;
+//import com.documents4j.job.LocalConverter;
+//import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import java.io.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Iterator;
+import java.util.List;
+
+//import com.itextpdf.text.Chunk;
+////import com.itextpdf.text.Document;
+//import com.itextpdf.text.Font;
+//import com.itextpdf.text.FontFactory;
+//import com.itextpdf.text.Image;
+//import com.itextpdf.text.PageSize;
+//import com.itextpdf.text.pdf.PdfWriter;
+//import com.itextpdf.text.BaseColor;
+//
+//import org.apache.poi.xwpf.usermodel.XWPFDocument;
+//import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+//import org.apache.poi.xwpf.usermodel.XWPFRun;
+//import org.apache.poi.xwpf.usermodel.XWPFPicture;
+//import org.apache.poi.xwpf.usermodel.XWPFPictureData;
+
+import javax.xml.parsers.DocumentBuilder;
+//import com.aspose.words.Document;
+
+//import com.groupdocs.conversion.Converter;
+//import com.groupdocs.conversion.options.convert.PdfConvertOptions;
+
+//import com.spire.doc.Document;
+
 
 public class PermissionModule extends ReactContextBaseJavaModule {
     private static final int EXTERNAL_STORAGE_CODE = 10;
@@ -135,175 +169,178 @@ public class PermissionModule extends ReactContextBaseJavaModule {
 
      @ReactMethod
      public void convertToPDF(String docPath, String pdfPath, Promise promise) {
-         try {
-             File baseFolder = new File(docPath).getParentFile();
-             File pdfFile = new File(baseFolder, "output.pdf");
+         // Aspose.words: Create a new empty document A
+//         Document docA = new Document();
 
-
-             InputStream in = new FileInputStream(docPath);
-//             InputStream in = new BufferedInputStream(new FileInputStream(docPath));
-//             ByteArrayOutputStream bo = new ByteArrayOutputStream();
-
-             IConverter converter = LocalConverter.builder()
-                     .baseFolder(baseFolder)
-                     .workerPool(20, 25, 2, TimeUnit.SECONDS)
-                     .processTimeout(5, TimeUnit.SECONDS)
-                     .build();
-
-//             Future<Boolean> conversion = converter
-//                     .convert(in).as(DocumentType.MS_WORD)
-//                     .to(pdfFile).as(DocumentType.PDF)
-//                     .prioritizeWith(1000) // optional
-//                     .schedule();
-//             conversion.get();
-
-//             try (OutputStream outputStream = new FileOutputStream("D:\\output.pdf")) {
-//                 bo.writeTo(outputStream);
-//             } catch (IOException e) {
+//         try {
+//             File baseFolder = new File(docPath).getParentFile();
+//             File pdfFile = new File(baseFolder, "output.pdf");
+//
+//
+//             InputStream in = new FileInputStream(docPath);
+////             InputStream in = new BufferedInputStream(new FileInputStream(docPath));
+////             ByteArrayOutputStream bo = new ByteArrayOutputStream();
+//
+//             IConverter converter = LocalConverter.builder()
+//                     .baseFolder(baseFolder)
+//                     .workerPool(20, 25, 2, TimeUnit.SECONDS)
+//                     .processTimeout(5, TimeUnit.SECONDS)
+//                     .build();
+//
+////             Future<Boolean> conversion = converter
+////                     .convert(in).as(DocumentType.MS_WORD)
+////                     .to(pdfFile).as(DocumentType.PDF)
+////                     .prioritizeWith(1000) // optional
+////                     .schedule();
+////             conversion.get();
+//
+////             try (OutputStream outputStream = new FileOutputStream("D:\\output.pdf")) {
+////                 bo.writeTo(outputStream);
+////             } catch (IOException e) {
+////                 e.printStackTrace();
+////             }
+//
+//             System.out.println("Chuyển đổi thành công, tệp PDF lưu tại: " + pdfFile.getAbsolutePath());
+//             in.close();
+//             Toast.makeText(getReactApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
+////             bo.close();
+//
+//             try {
+//                 Future<Boolean> conversion = converter
+//                         .convert(in).as(DocumentType.MS_WORD)
+//                         .to(pdfFile).as(DocumentType.PDF)
+//                         .prioritizeWith(1000) // optional
+//                         .schedule();
+//                 conversion.get();
+//
+//                 in.close();
+//                 Toast.makeText(getReactApplicationContext(), "Success!" + pdfFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+//             } catch (ExecutionException | InterruptedException e) {
+//                 // Xử lý ngoại lệ
 //                 e.printStackTrace();
+//                 Toast.makeText(getReactApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                 promise.resolve("???????" + e.getMessage());
 //             }
-
-             System.out.println("Chuyển đổi thành công, tệp PDF lưu tại: " + pdfFile.getAbsolutePath());
-             in.close();
-             Toast.makeText(getReactApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
-//             bo.close();
-
-             try {
-                 Future<Boolean> conversion = converter
-                         .convert(in).as(DocumentType.MS_WORD)
-                         .to(pdfFile).as(DocumentType.PDF)
-                         .prioritizeWith(1000) // optional
-                         .schedule();
-                 conversion.get();
-
-                 in.close();
-                 Toast.makeText(getReactApplicationContext(), "Success!" + pdfFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
-             } catch (ExecutionException | InterruptedException e) {
-                 // Xử lý ngoại lệ
-                 e.printStackTrace();
-                 Toast.makeText(getReactApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                 promise.resolve("???????" + e.getMessage());
-             }
-         } catch (Exception e) {
-             Toast.makeText(getReactApplicationContext(), "Failll 3", Toast.LENGTH_LONG).show();
-             // Handle other exceptions
-             e.printStackTrace();
-         }
-
-
-
-//         try {
-//             XWPFDocument document = new XWPFDocument(new FileInputStream(wordFilePath));
-//             Document pdfDocument = new Document();
-//             PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfFilePath));
-//             pdfDocument.open();
-//
-//             for (XWPFParagraph paragraph : document.getParagraphs()) {
-//                 pdfDocument.add(new Paragraph(paragraph.getText()));
-//             }
-//
-//             for (XWPFPictureData pictureData : document.getAllPictures()) {
-//                 byte[] bytes = pictureData.getData();
-//                 Image image = Image.getInstance(bytes);
-//                 pdfDocument.add(image);
-//             }
-//
-//             pdfDocument.close();
 //         } catch (Exception e) {
+//             Toast.makeText(getReactApplicationContext(), "Failll 3", Toast.LENGTH_LONG).show();
+//             // Handle other exceptions
 //             e.printStackTrace();
 //         }
-
-
-//         setup();
-//         PDDocument document = new PDDocument();
-//         PDPage page = new PDPage();
-//         document.addPage(page);
 //
-//         PDFont font = PDType1Font.HELVETICA;
 //
-//         PDPageContentStream contentStream;
-
-
-//          try {
-//              // Define a content stream for adding to the PDF
-//              contentStream = new PDPageContentStream(document, page);
-
-//              // Write Hello World in blue text
-//              contentStream.beginText();
-//              contentStream.setNonStrokingColor(15, 38, 192);
-//              contentStream.setFont(font, 12);
-//              contentStream.newLineAtOffset(100, 700);
-//              contentStream.showText("Hello World");
-//              contentStream.endText();
-
-//              // Load in the images
-// //             InputStream in = assetManager.open("falcon.jpg");
-// //             InputStream alpha = assetManager.open("trans.png");
-
-//              // Draw a green rectangle
-// //             contentStream.addRect(5, 500, 100, 100);
-// //             contentStream.setNonStrokingColor(0, 255, 125);
-// //             contentStream.fill();
-
-//              // Draw the falcon base image
-// //             PDImageXObject ximage = JPEGFactory.createFromStream(document, in);
-// //             contentStream.drawImage(ximage, 20, 20);
-
-//              // Draw the red overlay image
-// //             Bitmap alphaImage = BitmapFactory.decodeStream(alpha);
-// //             PDImageXObject alphaXimage = LosslessFactory.createFromImage(document, alphaImage);
-// //             contentStream.drawImage(alphaXimage, 20, 20 );
-
-//              // Make sure that the content stream is closed:
-//              contentStream.close();
-
-//              // Save the final pdf document to a file
-// //             String path = root.getAbsolutePath() + "/Created.pdf";
-//              String path = "/storage/emulated/0/Download/ConvertedTest.pdf";
-
-//              document.save(path);
-//              document.close();
-
-//              Toast.makeText(getReactApplicationContext(), "Success: path" + path, Toast.LENGTH_LONG).show();
-//              promise.resolve(path);
-//          } catch (IOException e) {
-//              Log.e("PdfBox-Android-Sample", "Exception thrown while creating PDF", e);
-//              Toast.makeText(getReactApplicationContext(), "Faiiiiilllll", Toast.LENGTH_LONG).show();
-//          }
-
-
-//         try {
-//             PDDocument document = new PDDocument();
-//             PDPage page = new PDPage();
-//             document.addPage(page);
 //
-//             PDPageContentStream contentStream = new PDPageContentStream(document, page);
+////         try {
+////             XWPFDocument document = new XWPFDocument(new FileInputStream(wordFilePath));
+////             Document pdfDocument = new Document();
+////             PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfFilePath));
+////             pdfDocument.open();
+////
+////             for (XWPFParagraph paragraph : document.getParagraphs()) {
+////                 pdfDocument.add(new Paragraph(paragraph.getText()));
+////             }
+////
+////             for (XWPFPictureData pictureData : document.getAllPictures()) {
+////                 byte[] bytes = pictureData.getData();
+////                 Image image = Image.getInstance(bytes);
+////                 pdfDocument.add(image);
+////             }
+////
+////             pdfDocument.close();
+////         } catch (Exception e) {
+////             e.printStackTrace();
+////         }
 //
-//             contentStream.setFont(PDType1Font.COURIER, 12);
-//             contentStream.beginText();
-//             contentStream.showText("Hello World");
-//             contentStream.endText();
-//             contentStream.close();
 //
-//             document.save("pdfBoxHelloWorld.pdf");
-//             document.close();
-//         } catch (IOException e) {
-//             e.printStackTrace();
-//         }
-     }
-
-//    @ReactMethod
-//    public void ConvertToPDF(String docPath, String pdfPath) {
-//        try {
-//            InputStream doc = new FileInputStream(new File(docPath));
-//            XWPFDocument document = new XWPFDocument(doc);
-//            PdfOptions options = PdfOptions.create();
-//            OutputStream out = new FileOutputStream(new File(pdfPath));
-//            PdfConverter.getInstance().convert(getReactApplicationContext(), "", document, out, options);
-//        } catch (IOException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//    }
+////         setup();
+////         PDDocument document = new PDDocument();
+////         PDPage page = new PDPage();
+////         document.addPage(page);
+////
+////         PDFont font = PDType1Font.HELVETICA;
+////
+////         PDPageContentStream contentStream;
+//
+//
+////          try {
+////              // Define a content stream for adding to the PDF
+////              contentStream = new PDPageContentStream(document, page);
+//
+////              // Write Hello World in blue text
+////              contentStream.beginText();
+////              contentStream.setNonStrokingColor(15, 38, 192);
+////              contentStream.setFont(font, 12);
+////              contentStream.newLineAtOffset(100, 700);
+////              contentStream.showText("Hello World");
+////              contentStream.endText();
+//
+////              // Load in the images
+//// //             InputStream in = assetManager.open("falcon.jpg");
+//// //             InputStream alpha = assetManager.open("trans.png");
+//
+////              // Draw a green rectangle
+//// //             contentStream.addRect(5, 500, 100, 100);
+//// //             contentStream.setNonStrokingColor(0, 255, 125);
+//// //             contentStream.fill();
+//
+////              // Draw the falcon base image
+//// //             PDImageXObject ximage = JPEGFactory.createFromStream(document, in);
+//// //             contentStream.drawImage(ximage, 20, 20);
+//
+////              // Draw the red overlay image
+//// //             Bitmap alphaImage = BitmapFactory.decodeStream(alpha);
+//// //             PDImageXObject alphaXimage = LosslessFactory.createFromImage(document, alphaImage);
+//// //             contentStream.drawImage(alphaXimage, 20, 20 );
+//
+////              // Make sure that the content stream is closed:
+////              contentStream.close();
+//
+////              // Save the final pdf document to a file
+//// //             String path = root.getAbsolutePath() + "/Created.pdf";
+////              String path = "/storage/emulated/0/Download/ConvertedTest.pdf";
+//
+////              document.save(path);
+////              document.close();
+//
+////              Toast.makeText(getReactApplicationContext(), "Success: path" + path, Toast.LENGTH_LONG).show();
+////              promise.resolve(path);
+////          } catch (IOException e) {
+////              Log.e("PdfBox-Android-Sample", "Exception thrown while creating PDF", e);
+////              Toast.makeText(getReactApplicationContext(), "Faiiiiilllll", Toast.LENGTH_LONG).show();
+////          }
+//
+//
+////         try {
+////             PDDocument document = new PDDocument();
+////             PDPage page = new PDPage();
+////             document.addPage(page);
+////
+////             PDPageContentStream contentStream = new PDPageContentStream(document, page);
+////
+////             contentStream.setFont(PDType1Font.COURIER, 12);
+////             contentStream.beginText();
+////             contentStream.showText("Hello World");
+////             contentStream.endText();
+////             contentStream.close();
+////
+////             document.save("pdfBoxHelloWorld.pdf");
+////             document.close();
+////         } catch (IOException e) {
+////             e.printStackTrace();
+////         }
+//     }
+//
+////    @ReactMethod
+////    public void ConvertToPDF(String docPath, String pdfPath) {
+////        try {
+////            InputStream doc = new FileInputStream(new File(docPath));
+////            XWPFDocument document = new XWPFDocument(doc);
+////            PdfOptions options = PdfOptions.create();
+////            OutputStream out = new FileOutputStream(new File(pdfPath));
+////            PdfConverter.getInstance().convert(getReactApplicationContext(), "", document, out, options);
+////        } catch (IOException ex) {
+////            System.out.println(ex.getMessage());
+////        }
+    }
 
     @ReactMethod
     public void getPermission(Promise promise) {

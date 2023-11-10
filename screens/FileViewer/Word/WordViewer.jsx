@@ -27,8 +27,9 @@ function base64ToArrayBuffer(data) {
 const convertDocxToPdf = async path => {
   try {
     console.log('path :>> ', path);
-    const pdfPath = '/storage/emulated/0/Download/ConvertedTest.pdf';
+    const pdfPath = '/storage/emulated/0/Download/Convert1.pdf';
     console.log('PermissionModule', PermissionModule);
+    // PermissionModule.convertWordToPdf(path, pdfPath)
     PermissionModule.convertToPDF(path, pdfPath)
       .then(res => {
         console.log('res :>> ', res);

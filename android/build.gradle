@@ -13,6 +13,18 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+//        maven { url "https://repository.aspose.com/words/" }
+//        maven {url "https://releases.aspose.com/java/repo/" }
+//        maven {
+//            url = uri("https://repository.groupdocs.com/repo/")
+//            name = "GroupDocs Artifacts Repository"
+//            content {
+//                includeGroup("com.groupdocs")
+//            }
+//        }
+//        maven {
+//            url 'https://my.pspdfkit.com/maven/'
+//        }
     }
     dependencies {
         classpath("com.android.tools.build:gradle")
