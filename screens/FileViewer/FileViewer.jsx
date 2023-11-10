@@ -19,12 +19,12 @@ const {PermissionModule} = NativeModules;
 
 export default function FileViewer(props) {
   const {navigation} = props;
-  // const [file, setFile] = useState();
-  const [file, setFile] = useState({
-    // WordTest
-    fileCopyUri: '/storage/emulated/0/Download/WordTest.docx',
-    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  });
+  const [file, setFile] = useState();
+  // const [file, setFile] = useState({
+  //   // WordTest
+  //   fileCopyUri: '/storage/emulated/0/Download/WordTest.docx',
+  //   type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  // });
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [initFile, setInitFile] = useState(false);
   const [allFiles, setAllFiles] = useState([]);

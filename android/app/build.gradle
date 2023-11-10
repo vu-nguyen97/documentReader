@@ -163,6 +163,7 @@ dependencies {
     // implementation("org.apache.poi:poi-ooxml:3.15")
     // implementation("org.apache.poi:poi-scratchpad:3.15")
 
+    implementation project(':react-native-file-viewer')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

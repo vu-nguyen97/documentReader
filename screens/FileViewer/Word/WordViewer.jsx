@@ -9,6 +9,7 @@ import RNFS from 'react-native-fs';
 import mammoth from 'mammoth';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {decode} from 'base-64';
+import FileViewer from 'react-native-file-viewer';
 
 const {PermissionModule} = NativeModules;
 
@@ -87,6 +88,14 @@ export default function WordViewer(props) {
 
   useEffect(() => {
     if (!file) return;
+    // console.log('file :>> ', file);
+    // Mở với app khác hỗ trợ mime type này
+    // FileViewer.open(file.uri).then(
+    //   res => {
+    //     console.log('??????', res);
+    //   },
+    //   err => console.log('>>>>>>>>', err),
+    // );
     handleConvertDocxToPdf();
   }, [file]);
 
