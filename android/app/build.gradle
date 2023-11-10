@@ -132,10 +132,22 @@ dependencies {
     // implementation("org.apache.poi:poi-ooxml:3.7")
 
     // ChatPGT
-    implementation("org.apache.poi:poi:5.2.3")
-    implementation("org.apache.poi:poi-ooxml:5.2.3")
-    implementation("org.apache.pdfbox:pdfbox:3.0.0-RC1")
+    // implementation("org.apache.poi:poi:5.2.3")
+    // implementation("org.apache.poi:poi-ooxml:5.2.3")
+    // implementation("org.apache.pdfbox:pdfbox:3.0.0-RC1")
+
+    // https://stackoverflow.com/questions/52625737/converting-word-docx-to-pdf-using-apache-poi-and-itext
     implementation 'com.tom-roush:pdfbox-android:2.0.27.0'
+    // implementation 'com.documents4j:documents4j-util-standalone:1.0.3'
+    // implementation 'com.documents4j:documents4j-transformer-msoffice-word:1.0.3'
+    // implementation 'com.google.guava:guava:32.0.1-jre'
+    // implementation 'org.slf4j:slf4j-api:2.0.7'
+    // implementation 'org.slf4j:slf4j-simple:2.0.7'
+
+    // implementation 'com.documents4j:documents4j-api:0.2.1'
+    // implementation 'com.documents4j:documents4j-util-conversion:0.2.1'
+    // implementation 'com.documents4j:documents4j-transformer:0.2.1'
+    // implementation 'com.documents4j:documents4j-local:0.2.1'
 
     // implementation("fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.core:1.0.6")
     // implementation("fr.opensagres.xdocreport:org.apache.poi.xwpf.converter.pdf:1.0.6")

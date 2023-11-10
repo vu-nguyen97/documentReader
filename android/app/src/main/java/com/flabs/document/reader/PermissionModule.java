@@ -21,13 +21,17 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.pdmodel.PDDocumentCatalog;
@@ -52,10 +56,10 @@ import com.tom_roush.pdfbox.rendering.PDFRenderer;
 import com.tom_roush.pdfbox.text.PDFTextStripper;
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 
-import org.apache.poi.wp.usermodel.Paragraph;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFPictureData;
+//import org.apache.poi.wp.usermodel.Paragraph;
+//import org.apache.poi.xwpf.usermodel.XWPFDocument;
+//import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+//import org.apache.poi.xwpf.usermodel.XWPFPictureData;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 
@@ -66,6 +70,16 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 //import com.itextpdf.text.Image;
 //import com.itextpdf.text.Paragraph;
 //import com.itextpdf.text.pdf.PdfPTable;
+
+import com.documents4j.api.DocumentType;
+import com.documents4j.api.IConverter;
+import com.documents4j.job.LocalConverter;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+
+import java.io.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class PermissionModule extends ReactContextBaseJavaModule {
     private static final int EXTERNAL_STORAGE_CODE = 10;
@@ -121,6 +135,63 @@ public class PermissionModule extends ReactContextBaseJavaModule {
 
      @ReactMethod
      public void convertToPDF(String docPath, String pdfPath, Promise promise) {
+         try {
+             File baseFolder = new File(docPath).getParentFile();
+             File pdfFile = new File(baseFolder, "output.pdf");
+
+
+             InputStream in = new FileInputStream(docPath);
+//             InputStream in = new BufferedInputStream(new FileInputStream(docPath));
+//             ByteArrayOutputStream bo = new ByteArrayOutputStream();
+
+             IConverter converter = LocalConverter.builder()
+                     .baseFolder(baseFolder)
+                     .workerPool(20, 25, 2, TimeUnit.SECONDS)
+                     .processTimeout(5, TimeUnit.SECONDS)
+                     .build();
+
+//             Future<Boolean> conversion = converter
+//                     .convert(in).as(DocumentType.MS_WORD)
+//                     .to(pdfFile).as(DocumentType.PDF)
+//                     .prioritizeWith(1000) // optional
+//                     .schedule();
+//             conversion.get();
+
+//             try (OutputStream outputStream = new FileOutputStream("D:\\output.pdf")) {
+//                 bo.writeTo(outputStream);
+//             } catch (IOException e) {
+//                 e.printStackTrace();
+//             }
+
+             System.out.println("Chuyển đổi thành công, tệp PDF lưu tại: " + pdfFile.getAbsolutePath());
+             in.close();
+             Toast.makeText(getReactApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
+//             bo.close();
+
+             try {
+                 Future<Boolean> conversion = converter
+                         .convert(in).as(DocumentType.MS_WORD)
+                         .to(pdfFile).as(DocumentType.PDF)
+                         .prioritizeWith(1000) // optional
+                         .schedule();
+                 conversion.get();
+
+                 in.close();
+                 Toast.makeText(getReactApplicationContext(), "Success!" + pdfFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+             } catch (ExecutionException | InterruptedException e) {
+                 // Xử lý ngoại lệ
+                 e.printStackTrace();
+                 Toast.makeText(getReactApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                 promise.resolve("???????" + e.getMessage());
+             }
+         } catch (Exception e) {
+             Toast.makeText(getReactApplicationContext(), "Failll 3", Toast.LENGTH_LONG).show();
+             // Handle other exceptions
+             e.printStackTrace();
+         }
+
+
+
 //         try {
 //             XWPFDocument document = new XWPFDocument(new FileInputStream(wordFilePath));
 //             Document pdfDocument = new Document();

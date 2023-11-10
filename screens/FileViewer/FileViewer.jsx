@@ -21,7 +21,7 @@ export default function FileViewer(props) {
   const {navigation} = props;
   // const [file, setFile] = useState();
   const [file, setFile] = useState({
-    fileCopyUri: '/storage/emulated/0/Download/WordTest.docx',
+    fileCopyUri: '/storage/emulated/0/Download/test.docx',
     type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   });
   const [isOpenDialog, setIsOpenDialog] = useState(false);

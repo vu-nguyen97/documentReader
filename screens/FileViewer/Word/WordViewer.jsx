@@ -41,7 +41,7 @@ const convertDocxToPdf = async path => {
 
 const convertDocxToPdf2 = async path => {
   try {
-    // console.log('path :>> ', path);
+    console.log('path :>> ', path);
     // /storage/emulated/0/Download/WordTest.docx
     //  file:///data/user/0/com.flabs.document.reader/cache/9f442e7f-9823-44b8-9f27-e7cce9d9cc06/WordTest.docx
     // Read the DOCX file
