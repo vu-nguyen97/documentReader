@@ -1,5 +1,6 @@
 export const COLORS = {
   // https://tailwindcss.com/docs/customizing-colors
+  primary: '#3985fd',
   white: '#ffffff',
   black: '#000000',
 
@@ -13,4 +14,15 @@ export const COLORS = {
   gray700: '#374151',
   gray800: '#1f2937',
   gray900: '#111827',
+
+  neutral50: '#fafafa',
+  neutral100: '#f5f5f5',
+  neutral200: '#e5e5e5',
+  neutral300: '#d4d4d4',
+  neutral400: '#a3a3a3',
+  neutral500: '#737373',
+  neutral600: '#525252',
+  neutral700: '#404040',
+  neutral800: '#262626',
+  neutral900: '#171717',
 };

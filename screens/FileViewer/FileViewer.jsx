@@ -14,6 +14,7 @@ import {
 } from '../../components/common/Hooks/Hooks';
 import {View, Text, TextInput, StyleSheet, NativeModules} from 'react-native';
 import RNFS from 'react-native-fs';
+import SearchBar from '../../components/common/SearchBar/SearchBar';
 
 const {PermissionModule} = NativeModules;
 
@@ -23,6 +24,8 @@ export default function FileViewer(props) {
   const [isOpenDialog, setIsOpenDialog] = useState(false);
   const [initFile, setInitFile] = useState(false);
   const [allFiles, setAllFiles] = useState([]);
+
+  const [search, setSearch] = useState();
 
   const handleBack = () => {
     setFile(undefined);
@@ -127,6 +130,16 @@ export default function FileViewer(props) {
         ViewerComp
       ) : (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 16,
+              paddingBottom: 0,
+            }}>
+            <SearchBar search={search} setSearch={setSearch} />
+          </View>
           <AllFile {...props} callback={setFile} allFiles={allFiles} />
         </View>
       )}

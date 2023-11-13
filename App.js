@@ -6,18 +6,20 @@ import FileViewer from './screens/FileViewer/FileViewer';
 import Tools from './screens/Tools/Tools';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Icon2 from 'react-native-vector-icons/Octicons';
-import Icon3 from 'react-native-vector-icons/Fontisto';
-import Icon4 from 'react-native-vector-icons/Feather';
+import Icon1 from 'react-native-vector-icons/FontAwesome5';
+import Icon2 from 'react-native-vector-icons/FontAwesome';
+import Icon3 from 'react-native-vector-icons/Ionicons';
+import Icon4 from 'react-native-vector-icons/FontAwesome6';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
+import {COLORS} from './components/constants/colors';
 import {HOME, FILE_VIEWER, SETTINGS, TOOLS} from './components/constants/page';
 
 const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#f57c00',
+    primary: COLORS.primary,
     // secondary: '#616161',
   },
 };
@@ -35,16 +37,24 @@ function App() {
               tabBarIcon: ({focused, color, size}) => {
                 const iconSize = size - 3;
                 if (route.name === HOME) {
-                  return <Icon2 name="history" size={iconSize} color={color} />;
+                  return <Icon1 name="history" size={iconSize} color={color} />;
                 } else if (route.name === FILE_VIEWER) {
-                  return <Icon4 name="file" size={iconSize} color={color} />;
+                  return (
+                    <Icon2 name="file-text" size={iconSize} color={color} />
+                  );
                 } else if (route.name === TOOLS) {
-                  return <Icon3 name="compass" size={iconSize} color={color} />;
+                  return <Icon4 name="compass" size={iconSize} color={color} />;
                 } else if (route.name === SETTINGS) {
-                  return <Icon name="setting" size={size - 1} color={color} />;
+                  return (
+                    <Icon3
+                      name="settings-sharp"
+                      size={size - 1}
+                      color={color}
+                    />
+                  );
                 }
               },
-              tabBarActiveTintColor: 'tomato',
+              tabBarActiveTintColor: COLORS.primary,
               tabBarInactiveTintColor: 'gray',
               tabBarItemStyle: {paddingVertical: 4},
               headerShown: false,
@@ -52,7 +62,7 @@ function App() {
             <Tab.Screen name={HOME} component={HomeScreen} />
             <Tab.Screen name={FILE_VIEWER} component={FileViewer} />
             <Tab.Screen name={TOOLS} component={Tools} />
-            <Tab.Screen name={SETTINGS} component={Settings} />
+            {/* <Tab.Screen name={SETTINGS} component={Settings} /> */}
           </Tab.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

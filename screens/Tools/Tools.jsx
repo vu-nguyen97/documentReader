@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {MD2Colors} from 'react-native-paper';
+import {COLORS} from '../../components/constants/colors';
 
 const Tools = () => {
   return (
@@ -18,7 +18,7 @@ export default Tools;
 
 const styles = StyleSheet.create({
   content: {
-    color: MD2Colors.orange900,
+    color: COLORS.primary,
     marginVertical: 5,
     fontSize: 14,
     fontWeight: '800',

@@ -99,26 +99,6 @@ export default function AllFile({navigation, callback, allFiles}: any) {
 
   return (
     <ScrollView>
-      <Appbar.Header style={styles.barHeader}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Appbar.BackAction
-            onPress={() => nav.goBack()}
-            color={MD2Colors.white}
-          />
-          <Text style={{fontSize: 20, color: MD2Colors.white}}>
-            All Document Reader
-          </Text>
-        </View>
-        <View style={styles.premiumButton}>
-          <Icon name="diamond" size={32} color="#f7661e" />
-        </View>
-      </Appbar.Header>
-
       <View>
         <View style={styles.wrapper}>
           {fileData.map((item: any, index: number) => (

@@ -9,13 +9,9 @@ const Settings = () => {
   return (
     <View>
       <Appbar.Header style={{backgroundColor: MD2Colors.deepOrange500}}>
-        <Appbar.BackAction
-          color={MD2Colors.white}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-        <Text style={{fontSize: 20, color: MD2Colors.white}}>Settings</Text>
+        <Text style={{fontSize: 20, color: MD2Colors.white, marginLeft: 12}}>
+          Settings
+        </Text>
       </Appbar.Header>
 
       <View style={styles.premium}>

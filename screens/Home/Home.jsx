@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
@@ -10,10 +9,11 @@ import {
 import {MD2Colors, useTheme, Icon} from 'react-native-paper';
 import Icon1 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
-import Icon3 from 'react-native-vector-icons/AntDesign';
 import Icon4 from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../components/constants/colors';
 import {TOOLS} from '../../components/constants/page';
+import SearchBar from '../../components/common/SearchBar/SearchBar';
+import Empty from '../../components/common/Empty/Empty';
 
 const CardData = [
   {
@@ -38,7 +38,7 @@ const CardData = [
   // },
 ];
 
-const RecentFiles = [
+const RecentFileData = [
   {
     name: 'Test1.docx',
     time: '26.10.2023',
@@ -71,9 +71,9 @@ const RecentFiles = [
 
 const Home = ({navigation}) => {
   const theme = useTheme();
-  const [listPaths, setListPaths] = useState([]);
   const [search, setSearch] = useState();
   const [listCards, setListCards] = useState(CardData);
+  const [recentFiles, setRecentFiles] = useState(RecentFileData);
 
   const onCloseCard = id => {
     setListCards(listCards.filter((item, idx) => id !== idx));
@@ -85,15 +85,7 @@ const Home = ({navigation}) => {
 
   return (
     <View style={{padding: 16}}>
-      <View style={styles.searchBar}>
-        <Icon3 name="search1" size={20} style={styles.searchIcon} />
-        <TextInput
-          style={styles.input}
-          placeholder="Search file"
-          onChangeText={setSearch}
-          value={search}
-        />
-      </View>
+      <SearchBar search={search} setSearch={setSearch} />
       <ScrollView horizontal={true} style={styles.listCards}>
         {listCards.map((el, id) => (
           <View style={styles.card} key={id}>
@@ -126,46 +118,32 @@ const Home = ({navigation}) => {
           }}>
           Recent Files
         </Text>
-        <View style={{backgroundColor: COLORS.white}}>
-          {RecentFiles.map((el, id) => (
-            <View style={styles.fileRow} key={id}>
-              <View style={styles.fileDetail}>
-                <Icon2 name={el.icon} size={30} color={el.color} />
-                <View style={{paddingLeft: 10}}>
-                  <Text style={{fontWeight: 'bold'}}>{el.name}</Text>
-                  <Text>
-                    {el.time} {el.size}KB
-                  </Text>
+        {recentFiles?.length > 0 ? (
+          <View style={styles.recentFiles}>
+            {RecentFileData.map((el, id) => (
+              <View style={styles.fileRow} key={id}>
+                <View style={styles.fileDetail}>
+                  <Icon2 name={el.icon} size={28} color={el.color} />
+                  <View style={{paddingLeft: 14}}>
+                    <Text style={{fontWeight: 'bold'}}>{el.name}</Text>
+                    <Text>
+                      {el.time} {el.size}KB
+                    </Text>
+                  </View>
                 </View>
+                {/* <Icon4 name="ellipsis-vertical-sharp" size={20} /> */}
               </View>
-              {/* <Icon4 name="ellipsis-vertical-sharp" size={20} /> */}
-            </View>
-          ))}
-        </View>
+            ))}
+          </View>
+        ) : (
+          <Empty />
+        )}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  searchIcon: {
-    position: 'absolute',
-    left: 18,
-    zIndex: 1,
-  },
-  input: {
-    flex: 1,
-    height: 46,
-    borderRadius: 25,
-    padding: 10,
-    paddingLeft: 50,
-    backgroundColor: COLORS.gray200,
-    fontSize: 16,
-  },
   listCards: {
     marginHorizontal: -6,
   },
@@ -175,7 +153,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
-    backgroundColor: COLORS.gray100,
+    backgroundColor: COLORS.neutral50,
     borderColor: COLORS.gray300,
     flexDirection: 'row',
   },
@@ -193,7 +171,7 @@ const styles = StyleSheet.create({
   },
   cardDescription: {
     fontSize: 14,
-    marginTop: 6,
+    marginTop: 5,
   },
   cardBtn: {
     marginTop: 4,
@@ -205,7 +183,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: MD2Colors.blue700,
   },
-  cardBtnText: {color: MD2Colors.blue700},
+  cardBtnText: {color: MD2Colors.blue700, fontWeight: '500'},
+  recentFiles: {
+    backgroundColor: COLORS.white,
+    borderRadius: 8,
+  },
   fileRow: {
     borderBottomWidth: 1,
     borderBottomColor: COLORS.gray100,
@@ -214,7 +196,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingLeft: 20,
     paddingRight: 14,
-    paddingVertical: 10,
+    paddingVertical: 14,
   },
   fileDetail: {
     flexDirection: 'row',
