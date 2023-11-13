@@ -6,7 +6,9 @@ import FileViewer from './screens/FileViewer/FileViewer';
 import Tools from './screens/Tools/Tools';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon2 from 'react-native-vector-icons/Octicons';
+import Icon3 from 'react-native-vector-icons/Fontisto';
+import Icon4 from 'react-native-vector-icons/Feather';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
 import {HOME, FILE_VIEWER, SETTINGS, TOOLS} from './components/constants/page';
@@ -31,31 +33,16 @@ function App() {
             initialRouteName={HOME}
             screenOptions={({route}) => ({
               tabBarIcon: ({focused, color, size}) => {
-                if (route.name === FILE_VIEWER) {
-                  return (
-                    <Icon2
-                      name="file-eye-outline"
-                      size={size - 5}
-                      color={color}
-                    />
-                  );
+                const iconSize = size - 3;
+                if (route.name === HOME) {
+                  return <Icon2 name="history" size={iconSize} color={color} />;
+                } else if (route.name === FILE_VIEWER) {
+                  return <Icon4 name="file" size={iconSize} color={color} />;
+                } else if (route.name === TOOLS) {
+                  return <Icon3 name="compass" size={iconSize} color={color} />;
+                } else if (route.name === SETTINGS) {
+                  return <Icon name="setting" size={size - 1} color={color} />;
                 }
-
-                let iconName = 'home';
-                switch (route.name) {
-                  case TOOLS:
-                    iconName = 'tool';
-                    break;
-                  case SETTINGS:
-                    iconName = 'setting';
-                    break;
-
-                  default:
-                    iconName = 'home';
-                    break;
-                }
-
-                return <Icon name={iconName} size={size - 5} color={color} />;
               },
               tabBarActiveTintColor: 'tomato',
               tabBarInactiveTintColor: 'gray',
