@@ -25,6 +25,9 @@ buildscript {
 //        maven {
 //            url 'https://my.pspdfkit.com/maven/'
 //        }
+        maven {
+            url 'https://repo.e-iceblue.com/nexus/content/groups/public/'
+        }
     }
     dependencies {
         classpath("com.android.tools.build:gradle")

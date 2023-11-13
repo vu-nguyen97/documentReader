@@ -163,6 +163,12 @@ dependencies {
     // implementation("org.apache.poi:poi-ooxml:3.15")
     // implementation("org.apache.poi:poi-scratchpad:3.15")
 
+    // https://mvnrepository.com/artifact/e-iceblue/spire.doc.free
+//    implementation("e-iceblue:spire.doc.free:5.2.0")
+//    implementation("e-iceblue:spire.doc:11.9.5")
+
+
+
     implementation project(':react-native-file-viewer')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
