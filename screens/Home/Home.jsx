@@ -11,7 +11,7 @@ import Icon1 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import Icon4 from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../components/constants/colors';
-import {TOOLS} from '../../components/constants/page';
+import {TOOLS, FILE_VIEWER} from '../../components/constants/page';
 import SearchBar from '../../components/common/SearchBar/SearchBar';
 import Empty from '../../components/common/Empty/Empty';
 
@@ -20,6 +20,7 @@ const CardData = [
     title: 'View file',
     icon: 'file-eye',
     content: 'View files in your phone.',
+    isRedirectToFile: true,
   },
   {
     title: 'Convert file',
@@ -79,8 +80,11 @@ const Home = ({navigation}) => {
     setListCards(listCards.filter((item, idx) => id !== idx));
   };
 
-  const onClickCard = () => {
-    navigation.navigate(TOOLS);
+  const onClickCard = (goToTool = true) => {
+    if (goToTool) {
+      return navigation.navigate(TOOLS);
+    }
+    navigation.navigate(FILE_VIEWER);
   };
 
   return (
@@ -100,7 +104,9 @@ const Home = ({navigation}) => {
                 </TouchableOpacity>
               </View>
               <Text style={styles.cardDescription}>{el.content}</Text>
-              <TouchableOpacity onPress={onClickCard} style={styles.cardBtn}>
+              <TouchableOpacity
+                onPress={() => onClickCard(!el.isRedirectToFile)}
+                style={styles.cardBtn}>
                 <Text style={styles.cardBtnText}>Try</Text>
               </TouchableOpacity>
             </View>
@@ -112,7 +118,6 @@ const Home = ({navigation}) => {
         <Text
           style={{
             fontSize: 16,
-            fontWeight: '500',
             color: COLORS.black,
             marginVertical: 18,
           }}>

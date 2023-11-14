@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {ReadMobileFile} from './ReadFile';
 import PdfViewer from './Pdf/PdfViewer';
 import TextViewer from './Text/TextViewer';
 import WordViewer from './Word/WordViewer';
@@ -7,12 +6,12 @@ import ExcelViewer from './Excel/ExcelViewer';
 import ZipViewer from './Zip/ZipViewer';
 import FileNotSupport from './FileNotSupport';
 import AllFile from './AllFile';
-import {Button, MD2Colors, Appbar, Dialog, Portal} from 'react-native-paper';
+import {Button, Dialog, Portal} from 'react-native-paper';
 import {
   useFocusScreen,
   useChangeScreen,
 } from '../../components/common/Hooks/Hooks';
-import {View, Text, TextInput, StyleSheet, NativeModules} from 'react-native';
+import {View, Text, NativeModules} from 'react-native';
 import RNFS from 'react-native-fs';
 import SearchBar from '../../components/common/SearchBar/SearchBar';
 
@@ -124,25 +123,21 @@ export default function FileViewer(props) {
       break;
   }
 
+  if (file)
+    return (
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        {ViewerComp}
+      </View>
+    );
+
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      {file ? (
-        ViewerComp
-      ) : (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 16,
-              paddingBottom: 0,
-            }}>
-            <SearchBar search={search} setSearch={setSearch} />
-          </View>
-          <AllFile {...props} callback={setFile} allFiles={allFiles} />
+    <View>
+      <View style={{padding: 16}}>
+        <View>
+          <SearchBar search={search} setSearch={setSearch} />
         </View>
-      )}
+        <AllFile {...props} callback={setFile} allFiles={allFiles} />
+      </View>
 
       <Portal>
         <Dialog visible={isOpenDialog} onDismiss={hideDialog}>
