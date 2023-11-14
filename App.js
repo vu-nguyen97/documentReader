@@ -14,6 +14,8 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
 import {COLORS} from './components/constants/colors';
 import {HOME, FILE_VIEWER, SETTINGS, TOOLS} from './components/constants/page';
+import {Provider} from 'react-redux';
+import store from './components/redux/store';
 
 const theme = {
   ...DefaultTheme,
@@ -29,43 +31,53 @@ function App() {
 
   return (
     <PaperProvider theme={theme}>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Tab.Navigator
-            initialRouteName={HOME}
-            screenOptions={({route}) => ({
-              tabBarIcon: ({focused, color, size}) => {
-                const iconSize = size - 3;
-                if (route.name === HOME) {
-                  return <Icon1 name="history" size={iconSize} color={color} />;
-                } else if (route.name === FILE_VIEWER) {
-                  return (
-                    <Icon2 name="file-text" size={iconSize} color={color} />
-                  );
-                } else if (route.name === TOOLS) {
-                  return <Icon4 name="compass" size={iconSize} color={color} />;
-                } else if (route.name === SETTINGS) {
-                  return (
-                    <Icon3
-                      name="settings-sharp"
-                      size={size - 1}
-                      color={color}
-                    />
-                  );
-                }
-              },
-              tabBarActiveTintColor: COLORS.primary,
-              tabBarInactiveTintColor: 'gray',
-              tabBarItemStyle: {paddingVertical: 4},
-              headerShown: false,
-            })}>
-            <Tab.Screen name={HOME} component={HomeScreen} />
-            <Tab.Screen name={FILE_VIEWER} component={FileViewer} />
-            <Tab.Screen name={TOOLS} component={Tools} />
-            {/* <Tab.Screen name={SETTINGS} component={Settings} /> */}
-          </Tab.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <Tab.Navigator
+              initialRouteName={HOME}
+              screenOptions={({route}) => ({
+                tabBarIcon: ({focused, color, size}) => {
+                  const iconSize = size - 3;
+                  if (route.name === HOME) {
+                    return (
+                      <Icon1 name="history" size={iconSize} color={color} />
+                    );
+                  } else if (route.name === FILE_VIEWER) {
+                    return (
+                      <Icon1
+                        name="file-contract"
+                        size={iconSize}
+                        color={color}
+                      />
+                    );
+                  } else if (route.name === TOOLS) {
+                    return (
+                      <Icon4 name="compass" size={iconSize} color={color} />
+                    );
+                  } else if (route.name === SETTINGS) {
+                    return (
+                      <Icon3
+                        name="settings-sharp"
+                        size={size - 1}
+                        color={color}
+                      />
+                    );
+                  }
+                },
+                tabBarActiveTintColor: COLORS.primary,
+                tabBarInactiveTintColor: 'gray',
+                tabBarItemStyle: {paddingVertical: 4},
+                headerShown: false,
+              })}>
+              <Tab.Screen name={HOME} component={HomeScreen} />
+              <Tab.Screen name={FILE_VIEWER} component={FileViewer} />
+              <Tab.Screen name={TOOLS} component={Tools} />
+              {/* <Tab.Screen name={SETTINGS} component={Settings} /> */}
+            </Tab.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </Provider>
     </PaperProvider>
   );
 }

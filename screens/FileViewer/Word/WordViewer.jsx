@@ -85,13 +85,13 @@ export default function WordViewer(props) {
       <Pdf
         source={{uri: docxConvertFilePath, cache: false}}
         onLoadComplete={(numberOfPages, filePath) => {
-          console.log(`Number of pages: ${numberOfPages}`);
+          // console.log(`Number of pages: ${numberOfPages}`);
         }}
         onPageChanged={(page, numberOfPages) => {
           // console.log(`Current page: ${page}`);
         }}
         onError={error => {
-          console.log('load file err', error);
+          // console.log('load file err', error);
         }}
         style={styles.pdf}
       />

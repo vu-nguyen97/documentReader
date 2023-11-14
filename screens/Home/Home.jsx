@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,13 +7,22 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {MD2Colors, useTheme, Icon} from 'react-native-paper';
-import Icon1 from 'react-native-vector-icons/FontAwesome';
-import Icon2 from 'react-native-vector-icons/FontAwesome5';
+// import Icon1 from 'react-native-vector-icons/FontAwesome5';
+// import Icon2 from 'react-native-vector-icons/FontAwesome';
 import Icon4 from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../components/constants/colors';
 import {TOOLS, FILE_VIEWER} from '../../components/constants/page';
 import SearchBar from '../../components/common/SearchBar/SearchBar';
 import Empty from '../../components/common/Empty/Empty';
+import {useSelector} from 'react-redux';
+import {LIST_FILES} from '../FileViewer/AllFile';
+import moment from 'moment';
+import {
+  getFileExtension,
+  formatBytes,
+  isSameDay,
+} from '../../components/common/Helpers/Helpers';
+import {FILE_IDS} from '../../components/constants/constants';
 
 const CardData = [
   {
@@ -39,42 +48,62 @@ const CardData = [
   // },
 ];
 
-const RecentFileData = [
-  {
-    name: 'Test1.docx',
-    time: '26.10.2023',
-    size: '20',
-    icon: 'file-word',
-    color: '#4e8bed',
-  },
-  {
-    name: 'Test1.docx',
-    time: '26.10.2023',
-    size: '20',
-    icon: 'file-pdf',
-    color: '#e6556d',
-  },
-  {
-    name: 'Test1.docx',
-    time: '26.10.2023',
-    size: '20',
-    icon: 'file-excel',
-    color: '#3ec431',
-  },
-  {
-    name: 'Test1.docx',
-    time: '26.10.2023',
-    size: '20',
-    icon: 'file-alt',
-    color: '#a06ded',
-  },
-];
+const getIcon = filePath => {
+  const fileExtension = getFileExtension(filePath);
+  const activedEl = LIST_FILES.find(
+    el => el.format && el.format.includes(fileExtension),
+  );
+
+  let icon;
+  switch (activedEl?.id) {
+    case FILE_IDS.pdf:
+      icon = <Icon source="file-pdf-box" size={30} color="#b8201e" />;
+      // icon = <Icon1 name="file-pdf" size={22} color="#b8201e" />;
+      break;
+    case FILE_IDS.word:
+      icon = <Icon source="microsoft-word" size={30} color="#4e8bed" />;
+      break;
+    case FILE_IDS.excel:
+      icon = <Icon source="microsoft-excel" size={30} color="#3ec431" />;
+      break;
+    case FILE_IDS.powerpoint:
+      icon = <Icon source="microsoft-powerpoint" size={30} color="#e86701" />;
+      break;
+    case FILE_IDS.screenshot:
+      icon = <Icon source="file-image-outline" size={30} color="#008000" />;
+      // icon = <Icon2 name="camera" size={22} color="#008000" />;
+      break;
+    case FILE_IDS.text:
+      icon = <Icon source="script-text-outline" size={30} color="#6b7280" />;
+      break;
+
+    default:
+      icon = <Icon source="file-outline" size={30} color="#6b7280" />;
+      break;
+  }
+  return icon;
+};
 
 const Home = ({navigation}) => {
   const theme = useTheme();
+  const recentFileState = useSelector(state => state.files.recent);
   const [search, setSearch] = useState();
   const [listCards, setListCards] = useState(CardData);
-  const [recentFiles, setRecentFiles] = useState(RecentFileData);
+  const [recentFiles, setRecentFiles] = useState([]);
+
+  useEffect(() => {
+    const newData = recentFileState.map(el => {
+      const format = isSameDay(new Date(), el.time) ? 'HH:mm' : 'DD-MM-YYYY';
+      const time = moment(el.time).format(format);
+      return {
+        ...el,
+        time,
+        size: formatBytes(el.size),
+        icon: getIcon(el.fileCopyUri),
+      };
+    });
+    setRecentFiles(newData);
+  }, [recentFileState]);
 
   const onCloseCard = id => {
     setListCards(listCards.filter((item, idx) => id !== idx));
@@ -88,12 +117,12 @@ const Home = ({navigation}) => {
   };
 
   return (
-    <View style={{padding: 16}}>
+    <ScrollView style={{padding: 16}}>
       <SearchBar search={search} setSearch={setSearch} />
       <ScrollView horizontal={true} style={styles.listCards}>
         {listCards.map((el, id) => (
           <View style={styles.card} key={id}>
-            <Icon source={el.icon} size={28} color={MD2Colors.blue700} />
+            <Icon source={el.icon} size={30} color={MD2Colors.blue700} />
             <View style={styles.cardContent}>
               <View style={styles.cardHeader}>
                 <Text style={styles.cardTitle}>{el.title}</Text>
@@ -125,14 +154,14 @@ const Home = ({navigation}) => {
         </Text>
         {recentFiles?.length > 0 ? (
           <View style={styles.recentFiles}>
-            {RecentFileData.map((el, id) => (
+            {recentFiles.map((el, id) => (
               <View style={styles.fileRow} key={id}>
                 <View style={styles.fileDetail}>
-                  <Icon2 name={el.icon} size={28} color={el.color} />
+                  {el.icon}
                   <View style={{paddingLeft: 14}}>
                     <Text style={{fontWeight: 'bold'}}>{el.name}</Text>
                     <Text>
-                      {el.time} {el.size}KB
+                      {el.time} . {el.size}
                     </Text>
                   </View>
                 </View>
@@ -144,7 +173,7 @@ const Home = ({navigation}) => {
           <Empty />
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -192,6 +221,7 @@ const styles = StyleSheet.create({
   recentFiles: {
     backgroundColor: COLORS.white,
     borderRadius: 8,
+    marginBottom: 30,
   },
   fileRow: {
     borderBottomWidth: 1,

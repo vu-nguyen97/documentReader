@@ -14,10 +14,47 @@ import {
 import {View, Text, NativeModules} from 'react-native';
 import RNFS from 'react-native-fs';
 import SearchBar from '../../components/common/SearchBar/SearchBar';
+import {useDispatch} from 'react-redux';
+import {updateRecentFiles} from '../../components/redux/files/files';
 
 const {PermissionModule} = NativeModules;
 
+const checkFile = (file, handleBack, setFile) => {
+  const viewerProps = {file, handleBack, setFile};
+  let ViewerComp;
+  let support = true;
+
+  // console.log('file?.type :>> ', file?.type);
+  switch (file?.type) {
+    case 'application/pdf':
+      ViewerComp = <PdfViewer {...viewerProps} />;
+      break;
+    case 'text/plain':
+      ViewerComp = <TextViewer {...viewerProps} />;
+      break;
+    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+      // case 'application/msword':
+      ViewerComp = <WordViewer {...viewerProps} />;
+      break;
+    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+      ViewerComp = <ExcelViewer {...viewerProps} />;
+      break;
+    case 'application/zip':
+      ViewerComp = <ZipViewer {...viewerProps} />;
+      break;
+
+    // case 'application/rar':
+    default:
+      support = false;
+      ViewerComp = <FileNotSupport {...viewerProps} />;
+      break;
+  }
+
+  return {comp: ViewerComp, support};
+};
+
 export default function FileViewer(props) {
+  const dispatch = useDispatch();
   const {navigation} = props;
   const [file, setFile] = useState();
   const [isOpenDialog, setIsOpenDialog] = useState(false);
@@ -80,7 +117,7 @@ export default function FileViewer(props) {
       });
       return allFiles;
     } catch (error) {
-      console.log('getAllFilesFromDirectory err:', error);
+      // console.log('getAllFilesFromDirectory err:', error);
       return [];
     }
   };
@@ -96,39 +133,19 @@ export default function FileViewer(props) {
     return () => handleBack();
   }, []);
 
-  const viewerProps = {file, handleBack, setFile};
-  let ViewerComp;
-  // console.log('file?.type :>> ', file?.type);
-  switch (file?.type) {
-    case 'application/pdf':
-      ViewerComp = <PdfViewer {...viewerProps} />;
-      break;
-    case 'text/plain':
-      ViewerComp = <TextViewer {...viewerProps} />;
-      break;
-    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-      // case 'application/msword':
-      ViewerComp = <WordViewer {...viewerProps} />;
-      break;
-    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-      ViewerComp = <ExcelViewer {...viewerProps} />;
-      break;
-    case 'application/zip':
-      ViewerComp = <ZipViewer {...viewerProps} />;
-      break;
+  const openFile = newFile => {
+    setFile(newFile);
+    dispatch(updateRecentFiles(newFile));
+  };
 
-    // case 'application/rar':
-    default:
-      ViewerComp = <FileNotSupport {...viewerProps} />;
-      break;
-  }
-
-  if (file)
+  const ViewerComp = checkFile(file, handleBack, openFile).comp;
+  if (file) {
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         {ViewerComp}
       </View>
     );
+  }
 
   return (
     <View>
@@ -136,7 +153,7 @@ export default function FileViewer(props) {
         <View>
           <SearchBar search={search} setSearch={setSearch} />
         </View>
-        <AllFile {...props} callback={setFile} allFiles={allFiles} />
+        <AllFile {...props} callback={openFile} allFiles={allFiles} />
       </View>
 
       <Portal>
