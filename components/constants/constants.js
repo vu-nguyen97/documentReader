@@ -15,12 +15,12 @@ export const FILE_IDS = {
   rar: 'rar',
 };
 
-// export const FILE_TYPES = {
-//   all: 'all',
-//   pdf: 'application/pdf',
-//   txt: 'text/plain',
-//   word: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-//   excel: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-//   zip: 'application/zip',
-//   rar: 'application/rar',
-// };
+export const FILE_TYPES = {
+  all: 'all',
+  pdf: 'application/pdf',
+  txt: 'text/plain',
+  word: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  excel: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  zip: 'application/zip',
+  rar: 'application/rar',
+};

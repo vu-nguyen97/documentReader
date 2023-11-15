@@ -5,6 +5,10 @@ export function getFileExtension(filename: string) {
   return re.exec(filename)?.[1];
 }
 
+export function getFileName(filename: string) {
+  return filename?.split('/')?.pop();
+}
+
 export function formatBytes(bytes: number, decimals = 0, space = true) {
   // https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
   const spaceStr = space ? ' ' : '';

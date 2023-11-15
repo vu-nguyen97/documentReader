@@ -6,23 +6,18 @@ import ExcelViewer from './Excel/ExcelViewer';
 import ZipViewer from './Zip/ZipViewer';
 import FileNotSupport from './FileNotSupport';
 import AllFile from './AllFile';
-import {Button, Dialog, Portal} from 'react-native-paper';
-import {
-  useFocusScreen,
-  useChangeScreen,
-} from '../../components/common/Hooks/Hooks';
-import {View, Text, NativeModules} from 'react-native';
-import RNFS from 'react-native-fs';
+import {View} from 'react-native';
 import SearchBar from '../../components/common/SearchBar/SearchBar';
 import {useDispatch} from 'react-redux';
 import {updateRecentFiles} from '../../components/redux/files/files';
-
-const {PermissionModule} = NativeModules;
+import PermissionsModal from '../../components/common/Permissions/PermissionsModal';
+import {getFileExtension} from '../../components/common/Helpers/Helpers';
 
 const checkFile = (file, handleBack, setFile) => {
   const viewerProps = {file, handleBack, setFile};
   let ViewerComp;
   let support = true;
+  const fileExtension = getFileExtension(file?.fileCopyUri);
 
   // console.log('file?.type :>> ', file?.type);
   switch (file?.type) {
@@ -55,79 +50,19 @@ const checkFile = (file, handleBack, setFile) => {
 
 export default function FileViewer(props) {
   const dispatch = useDispatch();
-  const {navigation} = props;
+  const {navigation, route} = props;
   const [file, setFile] = useState();
-  const [isOpenDialog, setIsOpenDialog] = useState(false);
-  const [initFile, setInitFile] = useState(false);
   const [allFiles, setAllFiles] = useState([]);
-
-  const [search, setSearch] = useState();
 
   const handleBack = () => {
     setFile(undefined);
   };
 
-  const checkPermission = () => {
-    PermissionModule.getPermission().then(hasPermission => {
-      if (!hasPermission) {
-        setIsOpenDialog(true);
-      } else if (!initFile) {
-        setInitFile(true);
-      }
-    });
-  };
-
-  useFocusScreen(navigation, checkPermission);
-  useChangeScreen(checkPermission);
-
   useEffect(() => {
-    // console.log('Check module params :>> ', PermissionModule.getConstants());
-    if (!initFile) return;
-
-    // CachesDirectoryPath = TemporaryDirectoryPath = 6 file = com.flabs.document.reader/cache
-    // DocumentDirectoryPath = 1 file: BridgeReactNativeDevBundle.js
-    getAllFilesFromDirectory(RNFS.ExternalStorageDirectoryPath)
-      .then(allFiles => {
-        setAllFiles(allFiles);
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
-  }, [initFile]);
-
-  const getAllFilesFromDirectory = async directory => {
-    try {
-      const files = await RNFS.readDir(directory);
-      const listPromises = [];
-      const allFiles = [];
-
-      files.forEach(file => {
-        if (file.isFile()) {
-          allFiles.push(file.path);
-        } else if (file.isDirectory()) {
-          listPromises.push(getAllFilesFromDirectory(file.path));
-        }
-      });
-
-      const filesInFolders = await Promise.all([...listPromises]);
-      filesInFolders.forEach(res => {
-        if (res?.length) {
-          allFiles.push(...res);
-        }
-      });
-      return allFiles;
-    } catch (error) {
-      // console.log('getAllFilesFromDirectory err:', error);
-      return [];
+    if (route.params?.file?.fileCopyUri) {
+      openFile(route.params?.file);
     }
-  };
-
-  const openSetting = () => {
-    PermissionModule.requestPermission();
-    hideDialog();
-  };
-
-  const hideDialog = () => setIsOpenDialog(false);
+  }, [route]);
 
   useEffect(() => {
     return () => handleBack();
@@ -151,26 +86,15 @@ export default function FileViewer(props) {
     <View>
       <View style={{padding: 16}}>
         <View>
-          <SearchBar search={search} setSearch={setSearch} />
+          <SearchBar navigation={navigation} />
         </View>
         <AllFile {...props} callback={openFile} allFiles={allFiles} />
       </View>
 
-      <Portal>
-        <Dialog visible={isOpenDialog} onDismiss={hideDialog}>
-          <Dialog.Icon icon="alert" />
-          <Dialog.Title>App Requires Permissions</Dialog.Title>
-          <Dialog.Content>
-            <Text variant="bodyMedium">
-              To use all features of the Document Reader app, please grant the
-              required permissions.
-            </Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={openSetting}>Open Settings</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <PermissionsModal
+        navigation={navigation}
+        updateFiles={files => setAllFiles(files)}
+      />
     </View>
   );
 }

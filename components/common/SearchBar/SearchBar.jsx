@@ -1,21 +1,26 @@
 import React from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
+import {Text, StyleSheet, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {COLORS} from '../../constants/colors';
+import {SEARCH_PAGE} from '../../constants/page';
 
 export default function SearchBar(props) {
-  const {search, setSearch} = props;
+  const {navigation} = props;
+
+  const goToSearchPage = () => {
+    navigation.navigate(SEARCH_PAGE);
+  };
 
   return (
-    <View style={styles.searchBar}>
-      <Icon name="search1" size={20} style={styles.searchIcon} />
-      <TextInput
-        style={styles.input}
-        placeholder="Search file, tools"
-        onChangeText={setSearch}
-        value={search}
+    <TouchableOpacity style={styles.searchBar} onPress={goToSearchPage}>
+      <Icon
+        name="menu"
+        size={20}
+        style={styles.searchIcon}
+        color={COLORS.black}
       />
-    </View>
+      <Text style={styles.input}>Search file, tools</Text>
+    </TouchableOpacity>
   );
 }
 
@@ -26,15 +31,14 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     position: 'absolute',
-    left: 18,
+    left: 19,
     zIndex: 1,
   },
   input: {
     flex: 1,
-    height: 46,
     borderRadius: 25,
-    padding: 10,
-    paddingLeft: 50,
+    padding: 13,
+    paddingLeft: 54,
     backgroundColor: COLORS.neutral200,
     fontSize: 16,
   },

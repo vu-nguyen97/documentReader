@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, ScrollView, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import {MD2Colors} from 'react-native-paper';
 // @ts-ignore
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -102,6 +109,10 @@ export default function AllFile({navigation, callback, allFiles}: any) {
   const nav = useNavigation();
   const [fileData, setfileData] = useState<any>(LIST_FILES);
 
+  const onPressType = (fileType: string) => {
+    console.log('fileType :>> ', fileType);
+  };
+
   useEffect(() => {
     if (!allFiles?.length) return setfileData(LIST_FILES);
 
@@ -135,10 +146,13 @@ export default function AllFile({navigation, callback, allFiles}: any) {
         </Text>
         <View style={styles.wrapper}>
           {fileData.map((item: any, index: number) => {
-            const {iconEl, name, amount, bgStart, bgEnd} = item;
+            const {iconEl, name, amount, bgStart, bgEnd, id} = item;
 
             return (
-              <View key={index} style={styles.columnFileName}>
+              <TouchableOpacity
+                key={index}
+                style={styles.columnFileName}
+                onPress={() => onPressType(id)}>
                 {bgStart && bgEnd ? (
                   <LinearGradient
                     colors={[bgStart, bgEnd]}
@@ -154,7 +168,7 @@ export default function AllFile({navigation, callback, allFiles}: any) {
                 <Text style={{fontWeight: 'bold', fontSize: 13}}>
                   {name} ({amount || 0})
                 </Text>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>

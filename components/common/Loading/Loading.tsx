@@ -6,12 +6,12 @@ import {COLORS} from '../../constants/colors';
 export default function Loading({text = ''}) {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <ActivityIndicator animating={true} size="large" color={COLORS.primary} />
+      <ActivityIndicator animating={true} size="large" color={COLORS.gray600} />
       {text && (
         <Text
           style={{
             marginTop: 16,
-            color: COLORS.primary,
+            color: COLORS.gray600,
             fontSize: 16,
             textAlign: 'center',
           }}>
