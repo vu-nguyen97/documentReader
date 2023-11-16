@@ -2,20 +2,19 @@ import React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import Pdf from 'react-native-pdf';
-import {MORE_ICON} from '../../../components/common/Helpers/UIHelpers';
+import {getFileName} from '../../../components/common/Helpers/Helpers';
 
 const PdfViewer = props => {
   const {handleBack, file} = props;
 
+  console.log('file :>> ', file);
   const openMoreAction = () => {};
 
   return (
     <View style={{flex: 1}}>
       <Appbar.Header style={styles.headerMenu}>
         <Appbar.BackAction onPress={handleBack} />
-        <Appbar.Content title="Title" />
-        <Appbar.Action icon="magnify" onPress={() => {}} />
-        <Appbar.Action icon={MORE_ICON} onPress={openMoreAction} />
+        <Appbar.Content title={getFileName(file.fileCopyUri)} />
       </Appbar.Header>
       <Pdf
         source={{uri: decodeURI(file.fileCopyUri), cache: false}}

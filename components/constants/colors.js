@@ -1,6 +1,6 @@
 export const COLORS = {
   // https://tailwindcss.com/docs/customizing-colors
-  primary: '#3985fd',
+  primary: '#2878e1',
   wraning: '#f97316',
   white: '#ffffff',
   black: '#000000',

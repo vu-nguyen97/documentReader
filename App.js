@@ -16,6 +16,7 @@ import {
 import {Provider} from 'react-redux';
 import store from './components/redux/store';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {MenuProvider} from 'react-native-popup-menu';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,32 +33,34 @@ function App() {
   return (
     <PaperProvider theme={theme}>
       <Provider store={store}>
-        <SafeAreaProvider>
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen
-                name={MAIN_SCREENS}
-                component={MainScreens}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name={SEARCH_PAGE}
-                component={SearchPage}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name={FILES_BY_FORMAT}
-                component={FileByFormat}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name={VIEWER}
-                component={Viewer}
-                options={{headerShown: false}}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </SafeAreaProvider>
+        <MenuProvider>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <Stack.Navigator>
+                <Stack.Screen
+                  name={MAIN_SCREENS}
+                  component={MainScreens}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name={SEARCH_PAGE}
+                  component={SearchPage}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name={FILES_BY_FORMAT}
+                  component={FileByFormat}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name={VIEWER}
+                  component={Viewer}
+                  options={{headerShown: false}}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </MenuProvider>
       </Provider>
     </PaperProvider>
   );

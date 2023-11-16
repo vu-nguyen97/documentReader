@@ -83,7 +83,7 @@ export default function WordViewer(props) {
         <Appbar.Action icon={MORE_ICON} onPress={openMoreAction} />
       </Appbar.Header>
       <Pdf
-        source={{uri: decodeURI(file.fileCopyUri), cache: false}}
+        source={{uri: docxConvertFilePath, cache: false}}
         onLoadComplete={(numberOfPages, filePath) => {
           // console.log(`Number of pages: ${numberOfPages}`);
         }}

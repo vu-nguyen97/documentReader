@@ -11,11 +11,11 @@ import {MD2Colors, useTheme, Icon} from 'react-native-paper';
 // import Icon2 from 'react-native-vector-icons/FontAwesome';
 import Icon4 from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../components/constants/colors';
-import {TOOLS, FILES, VIEWER} from '../../components/constants/page';
+import {TOOLS, FILES} from '../../components/constants/page';
 import SearchBar from '../../components/common/SearchBar/SearchBar';
 import Empty from '../../components/common/Empty/Empty';
 import {useSelector} from 'react-redux';
-import {getFileTime} from '../../components/common/Helpers/Helpers';
+import {getFileTime, viewFile} from '../../components/common/Helpers/Helpers';
 import {getFileIcon} from '../../components/common/Helpers/UIHelpers';
 
 const CardData = [
@@ -71,7 +71,7 @@ const Home = ({navigation}) => {
   };
 
   const onPressFile = file => {
-    navigation.navigate(VIEWER, {file: {...file, icon: undefined}});
+    viewFile(file.path, navigation);
   };
 
   return (
