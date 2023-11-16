@@ -1,7 +1,7 @@
 import React from 'react';
 import {Platform} from 'react-native';
 import {getFileExtension} from './Helpers';
-import {LIST_FILES} from '../../../screens/FileViewer/AllFile';
+import {LIST_FILES} from '../../../screens/FileViewer/constants';
 import {FILE_IDS} from '../../../components/constants/constants';
 import {Icon} from 'react-native-paper';
 

@@ -1,6 +1,6 @@
 import moment from 'moment';
 import RNFS from 'react-native-fs';
-import {FILE_VIEWER, MAIN_SCREENS} from '../../constants/page';
+import {VIEWER} from '../../constants/page';
 import {FILE_TYPES} from '../../constants/constants';
 
 export const viewFile = (fileName: string, navigation: any, allFiles: any) => {
@@ -27,10 +27,7 @@ export const viewFile = (fileName: string, navigation: any, allFiles: any) => {
     default:
       break;
   }
-  navigation.navigate(MAIN_SCREENS, {
-    screen: FILE_VIEWER,
-    params: {file: {fileCopyUri: activedPath, type}},
-  });
+  navigation.navigate(VIEWER, {file: {fileCopyUri: activedPath, type}});
 };
 
 export function getFileExtension(filename: string) {

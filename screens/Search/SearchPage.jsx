@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../components/constants/colors';
@@ -13,6 +14,7 @@ import PermissionsModal from '../../components/common/Permissions/PermissionsMod
 import {throttle} from 'lodash';
 import {getFileName, viewFile} from '../../components/common/Helpers/Helpers';
 import {getFileIcon} from '../../components/common/Helpers/UIHelpers';
+import empty from '../../components/assets/images/empty.png';
 
 export default function SearchPage(props) {
   const inputRef = useRef(null);
@@ -102,7 +104,13 @@ export default function SearchPage(props) {
               ))
             ) : (
               <View>
-                <Text style={{textAlign: 'center', marginTop: 45}}>
+                <View style={{flex: 1, alignItems: 'center'}}>
+                  <Image
+                    source={empty}
+                    style={{height: 130, resizeMode: 'contain'}}
+                  />
+                </View>
+                <Text style={{textAlign: 'center'}}>
                   Sorry, no results found.
                 </Text>
                 <Text style={{textAlign: 'center', marginTop: 5}}>

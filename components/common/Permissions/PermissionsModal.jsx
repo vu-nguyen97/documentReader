@@ -4,6 +4,8 @@ import {useFocusScreen, useChangeScreen} from '../../common/Hooks/Hooks';
 import {Text, NativeModules} from 'react-native';
 import RNFS from 'react-native-fs';
 import {COLORS} from '../../constants/colors';
+import {SUPPORTED_FORMATS} from '../../../screens/FileViewer/constants';
+import {getFileExtension} from '../../common/Helpers/Helpers';
 
 const {PermissionModule} = NativeModules;
 
@@ -36,7 +38,12 @@ export default function PermissionsModal({
     // DocumentDirectoryPath = 1 file: BridgeReactNativeDevBundle.js
     getAllFilesFromDirectory(RNFS.ExternalStorageDirectoryPath)
       .then(allFiles => {
-        updateFiles(allFiles);
+        updateFiles(
+          allFiles.filter(el => {
+            const fileExtension = getFileExtension(el);
+            return fileExtension && SUPPORTED_FORMATS?.includes(fileExtension);
+          }),
+        );
       })
       .catch(error => {
         console.log('error', error);

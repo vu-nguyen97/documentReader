@@ -11,11 +11,7 @@ import {MD2Colors, useTheme, Icon} from 'react-native-paper';
 // import Icon2 from 'react-native-vector-icons/FontAwesome';
 import Icon4 from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../components/constants/colors';
-import {
-  TOOLS,
-  FILE_VIEWER,
-  MAIN_SCREENS,
-} from '../../components/constants/page';
+import {TOOLS, FILES, VIEWER} from '../../components/constants/page';
 import SearchBar from '../../components/common/SearchBar/SearchBar';
 import Empty from '../../components/common/Empty/Empty';
 import {useSelector} from 'react-redux';
@@ -71,14 +67,11 @@ const Home = ({navigation}) => {
     if (goToTool) {
       return navigation.navigate(TOOLS);
     }
-    navigation.navigate(FILE_VIEWER);
+    navigation.navigate(FILES);
   };
 
   const onPressFile = file => {
-    navigation.navigate(MAIN_SCREENS, {
-      screen: FILE_VIEWER,
-      params: {file: {...file, icon: undefined}},
-    });
+    navigation.navigate(VIEWER, {file: {...file, icon: undefined}});
   };
 
   return (

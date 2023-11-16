@@ -1,11 +1,10 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {HOME, FILE_VIEWER, SETTINGS, TOOLS} from '../components/constants/page';
+import {HOME, FILES, SETTINGS, TOOLS} from '../components/constants/page';
 import HomeScreen from './Home/Home';
 import Settings from './Settings/Settings';
 import FileViewer from './FileViewer/FileViewer';
 import Tools from './Tools/Tools';
-import Icon from 'react-native-vector-icons/AntDesign';
 import Icon1 from 'react-native-vector-icons/FontAwesome5';
 import Icon2 from 'react-native-vector-icons/FontAwesome';
 import Icon3 from 'react-native-vector-icons/Ionicons';
@@ -22,7 +21,7 @@ export default function MainScreens() {
           const iconSize = size - 3;
           if (route.name === HOME) {
             return <Icon1 name="history" size={iconSize} color={color} />;
-          } else if (route.name === FILE_VIEWER) {
+          } else if (route.name === FILES) {
             return <Icon1 name="file-contract" size={iconSize} color={color} />;
           } else if (route.name === TOOLS) {
             return <Icon4 name="compass" size={iconSize} color={color} />;
@@ -38,7 +37,7 @@ export default function MainScreens() {
         headerShown: false,
       })}>
       <Tab.Screen name={HOME} component={HomeScreen} />
-      <Tab.Screen name={FILE_VIEWER} component={FileViewer} />
+      <Tab.Screen name={FILES} component={FileViewer} />
       <Tab.Screen name={TOOLS} component={Tools} />
       {/* <Tab.Screen name={SETTINGS} component={Settings} /> */}
     </Tab.Navigator>

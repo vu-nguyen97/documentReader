@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import MainScreens from './screens/MainScreens';
 import SearchPage from './screens/Search/SearchPage';
 import FileByFormat from './screens/FileByFormat/FileByFormat';
+import Viewer from './screens/Viewer/Viewer';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
 import {COLORS} from './components/constants/colors';
@@ -10,6 +11,7 @@ import {
   MAIN_SCREENS,
   SEARCH_PAGE,
   FILES_BY_FORMAT,
+  VIEWER,
 } from './components/constants/page';
 import {Provider} from 'react-redux';
 import store from './components/redux/store';
@@ -46,6 +48,11 @@ function App() {
               <Stack.Screen
                 name={FILES_BY_FORMAT}
                 component={FileByFormat}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name={VIEWER}
+                component={Viewer}
                 options={{headerShown: false}}
               />
             </Stack.Navigator>

@@ -18,7 +18,7 @@ const PdfViewer = props => {
         <Appbar.Action icon={MORE_ICON} onPress={openMoreAction} />
       </Appbar.Header>
       <Pdf
-        source={{uri: file.fileCopyUri, cache: false}}
+        source={{uri: decodeURI(file.fileCopyUri), cache: false}}
         onLoadComplete={(numberOfPages, filePath) => {
           // console.log(`Number of pages: ${numberOfPages}`);
         }}
