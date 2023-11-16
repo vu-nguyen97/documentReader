@@ -19,8 +19,7 @@ import {
 import SearchBar from '../../components/common/SearchBar/SearchBar';
 import Empty from '../../components/common/Empty/Empty';
 import {useSelector} from 'react-redux';
-import moment from 'moment';
-import {formatBytes, isSameDay} from '../../components/common/Helpers/Helpers';
+import {getFileTime} from '../../components/common/Helpers/Helpers';
 import {getFileIcon} from '../../components/common/Helpers/UIHelpers';
 
 const CardData = [
@@ -55,13 +54,10 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     const newData = recentFileState.map(el => {
-      const format = isSameDay(new Date(), el.time) ? 'HH:mm' : 'DD-MM-YYYY';
-      const time = moment(el.time).format(format);
       return {
         ...el,
-        time,
-        size: formatBytes(el.size),
-        icon: getFileIcon(el.fileCopyUri),
+        time: getFileTime(el.time),
+        icon: getFileIcon(el.path),
       };
     });
     setRecentFiles(newData);

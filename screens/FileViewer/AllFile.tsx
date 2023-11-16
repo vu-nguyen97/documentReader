@@ -23,6 +23,7 @@ import {ReadMobileFile} from './ReadFile';
 import {getFileExtension} from '../../components/common/Helpers/Helpers';
 import LinearGradient from 'react-native-linear-gradient';
 import {FILE_IDS} from '../../components/constants/constants';
+import {FILES_BY_FORMAT} from '../../components/constants/page';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -109,8 +110,12 @@ export default function AllFile({navigation, callback, allFiles}: any) {
   const nav = useNavigation();
   const [fileData, setfileData] = useState<any>(LIST_FILES);
 
-  const onPressType = (fileType: string) => {
-    console.log('fileType :>> ', fileType);
+  const onPressType = (fileType: string, id: string) => {
+    const files = allFiles?.filter((el: string) => {
+      const fileExtension = getFileExtension(el);
+      return fileExtension && fileType?.includes(fileExtension);
+    });
+    navigation.navigate(FILES_BY_FORMAT, {files});
   };
 
   useEffect(() => {
@@ -118,17 +123,18 @@ export default function AllFile({navigation, callback, allFiles}: any) {
 
     let newData: any = [...LIST_FILES];
     let totalFiles = 0;
+
     allFiles.forEach((filePath: any) => {
       const fileExtension = getFileExtension(filePath);
-      const index = newData.findIndex(
-        (el: any) => el.format && el.format.includes(fileExtension),
-      );
 
-      if (index !== -1) {
-        const amount = newData[index].amount || 0;
-        newData[index].amount = amount + 1;
-        totalFiles += 1;
-      }
+      newData = newData.map((el: any) => {
+        if (el.format && el.format.includes(fileExtension)) {
+          totalFiles += 1;
+          const amount = el.amount || 0;
+          return {...el, amount: amount + 1};
+        }
+        return el;
+      });
     });
     newData[0].amount = totalFiles;
     setfileData(newData);
@@ -146,13 +152,13 @@ export default function AllFile({navigation, callback, allFiles}: any) {
         </Text>
         <View style={styles.wrapper}>
           {fileData.map((item: any, index: number) => {
-            const {iconEl, name, amount, bgStart, bgEnd, id} = item;
+            const {iconEl, name, amount, bgStart, bgEnd, format, id} = item;
 
             return (
               <TouchableOpacity
                 key={index}
                 style={styles.columnFileName}
-                onPress={() => onPressType(id)}>
+                onPress={() => amount && onPressType(format, id)}>
                 {bgStart && bgEnd ? (
                   <LinearGradient
                     colors={[bgStart, bgEnd]}

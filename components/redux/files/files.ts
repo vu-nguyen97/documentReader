@@ -1,8 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
 
+export interface File {
+  path: string;
+  name: string;
+  time: string;
+  size: string;
+  location?: string;
+}
+
 interface RecentFile {
   maxRecentFiles: number;
-  recent: any;
+  recent: File[];
 }
 
 const initialData: RecentFile = {
@@ -15,14 +23,13 @@ export const filesSlice = createSlice({
   initialState: initialData,
   reducers: {
     updateRecentFiles: (state, {payload}) => {
-      if (!payload) return;
+      if (!payload?.name) return;
 
-      const newData = {...payload, time: new Date().toLocaleString()};
       const newList = [...state.recent].filter((file: any) => {
-        if (file.uri === payload.uri) return false;
+        if (file.path === payload.path) return false;
         return true;
       });
-      newList.unshift(newData);
+      newList.unshift(payload);
 
       state.recent =
         newList.length > state.maxRecentFiles ? newList.slice(0, -1) : newList;

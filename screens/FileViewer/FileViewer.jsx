@@ -11,7 +11,13 @@ import SearchBar from '../../components/common/SearchBar/SearchBar';
 import {useDispatch} from 'react-redux';
 import {updateRecentFiles} from '../../components/redux/files/files';
 import PermissionsModal from '../../components/common/Permissions/PermissionsModal';
-import {getFileExtension} from '../../components/common/Helpers/Helpers';
+import {
+  getFileExtension,
+  formatBytes,
+  getFileLocation,
+  getFileName,
+} from '../../components/common/Helpers/Helpers';
+import RNFS from 'react-native-fs';
 
 const checkFile = (file, handleBack, setFile) => {
   const viewerProps = {file, handleBack, setFile};
@@ -69,8 +75,37 @@ export default function FileViewer(props) {
   }, []);
 
   const openFile = newFile => {
+    if (!newFile?.fileCopyUri) return;
     setFile(newFile);
-    dispatch(updateRecentFiles(newFile));
+
+    const {fileCopyUri} = newFile;
+    const time = new Date().toLocaleString();
+
+    if (newFile.name) {
+      // Open file from DocumentPicker
+      return dispatch(
+        updateRecentFiles({
+          path: fileCopyUri,
+          time,
+          name: newFile.name,
+          size: formatBytes(newFile.size),
+          location: getFileLocation(fileCopyUri),
+        }),
+      );
+    }
+
+    // Open file from absolute path
+    return RNFS.stat(fileCopyUri).then(res => {
+      dispatch(
+        updateRecentFiles({
+          path: res.path,
+          time,
+          name: getFileName(res.path),
+          size: formatBytes(res.size),
+          location: getFileLocation(res.path),
+        }),
+      );
+    });
   };
 
   const ViewerComp = checkFile(file, handleBack, openFile).comp;

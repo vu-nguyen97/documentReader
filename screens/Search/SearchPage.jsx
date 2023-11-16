@@ -11,13 +11,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../components/constants/colors';
 import PermissionsModal from '../../components/common/Permissions/PermissionsModal';
 import {throttle} from 'lodash';
-import {
-  getFileName,
-  getFileExtension,
-} from '../../components/common/Helpers/Helpers';
-import {FILE_VIEWER, MAIN_SCREENS} from '../../components/constants/page';
+import {getFileName, viewFile} from '../../components/common/Helpers/Helpers';
 import {getFileIcon} from '../../components/common/Helpers/UIHelpers';
-import {FILE_TYPES} from '../../components/constants/constants';
 
 export default function SearchPage(props) {
   const inputRef = useRef(null);
@@ -63,31 +58,7 @@ export default function SearchPage(props) {
   };
 
   const onPressFile = fileName => {
-    const activedPath = allFiles.find(el => el.endsWith(fileName));
-    const fileExtension = getFileExtension(fileName);
-    let type;
-
-    switch (fileExtension) {
-      case 'txt':
-        type = FILE_TYPES.txt;
-        break;
-      case 'pdf':
-        type = FILE_TYPES.pdf;
-        break;
-      case 'docx':
-        type = FILE_TYPES.word;
-        break;
-      case 'xlsx':
-        type = FILE_TYPES.excel;
-        break;
-
-      default:
-        break;
-    }
-    navigation.navigate(MAIN_SCREENS, {
-      screen: FILE_VIEWER,
-      params: {file: {fileCopyUri: activedPath, type}},
-    });
+    viewFile(fileName, navigation, allFiles);
   };
 
   return (
@@ -112,20 +83,34 @@ export default function SearchPage(props) {
       <ScrollView style={styles.resultArea}>
         {/* <Text style={{fontWeight: '600', fontSize: 16}}>Recent files:</Text> */}
 
-        {searchText && searchResults?.length > 0 && (
-          <View>
+        {searchText && (
+          <View style={{paddingBottom: 16}}>
             <Text style={styles.documentResults}>Documents</Text>
-            {searchResults.map((el, id) => (
-              <TouchableOpacity
-                onPress={() => onPressFile(el)}
-                style={styles.fileRow}
-                key={id}>
-                <View style={styles.fileDetail}>
-                  {getFileIcon(el)}
-                  <Text style={{fontWeight: 'bold', marginLeft: 10}}>{el}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+            {searchResults?.length > 0 ? (
+              searchResults.map((el, id) => (
+                <TouchableOpacity
+                  onPress={() => onPressFile(el)}
+                  style={styles.fileRow}
+                  key={id}>
+                  <View style={styles.fileDetail}>
+                    {getFileIcon(el)}
+                    <Text style={{fontWeight: 'bold', marginLeft: 10}}>
+                      {el}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <View>
+                <Text style={{textAlign: 'center', marginTop: 45}}>
+                  Sorry, no results found.
+                </Text>
+                <Text style={{textAlign: 'center', marginTop: 5}}>
+                  Please try a different search.
+                </Text>
+                <View style={styles.gapLine} />
+              </View>
+            )}
           </View>
         )}
       </ScrollView>
@@ -178,5 +163,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  gapLine: {
+    height: 8,
+    marginVertical: 50,
+    backgroundColor: COLORS.gray100,
   },
 });

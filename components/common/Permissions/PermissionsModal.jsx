@@ -84,7 +84,9 @@ export default function PermissionsModal({
         onDismiss={hideDialog}
         style={{backgroundColor: COLORS.gray50}}>
         <Dialog.Icon icon="alert" color={COLORS.wraning} />
-        <Dialog.Title>App Requires Permissions</Dialog.Title>
+        <Dialog.Title style={{textAlign: 'center', fontSize: 18}}>
+          App Requires Permissions
+        </Dialog.Title>
         <Dialog.Content>
           <Text variant="bodyMedium">
             To use all features of the Document Reader app, please grant the
