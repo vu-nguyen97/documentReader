@@ -1,74 +1,67 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import HomeScreen from './screens/Home/Home';
-import Settings from './screens/Settings/Settings';
-import FileViewer from './screens/FileViewer/FileViewer';
-import Tools from './screens/Tools/Tools';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/AntDesign';
-import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import MainScreens from './screens/MainScreens';
+import SearchPage from './screens/Search/SearchPage';
+import FileByFormat from './screens/FileByFormat/FileByFormat';
+import Viewer from './screens/Viewer/Viewer';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
-import {HOME, FILE_VIEWER, SETTINGS, TOOLS} from './components/constants/page';
+import {COLORS} from './components/constants/colors';
+import {
+  MAIN_SCREENS,
+  SEARCH_PAGE,
+  FILES_BY_FORMAT,
+  VIEWER,
+} from './components/constants/page';
+import {Provider} from 'react-redux';
+import store from './components/redux/store';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {MenuProvider} from 'react-native-popup-menu';
+
+const Stack = createNativeStackNavigator();
 
 const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#f57c00',
+    primary: COLORS.primary,
     // secondary: '#616161',
   },
 };
 
 function App() {
-  const Tab = createBottomTabNavigator();
-
   return (
     <PaperProvider theme={theme}>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Tab.Navigator
-            initialRouteName={HOME}
-            screenOptions={({route}) => ({
-              tabBarIcon: ({focused, color, size}) => {
-                if (route.name === FILE_VIEWER) {
-                  return (
-                    <Icon2
-                      name="file-eye-outline"
-                      size={size - 5}
-                      color={color}
-                    />
-                  );
-                }
-
-                let iconName = 'home';
-                switch (route.name) {
-                  case TOOLS:
-                    iconName = 'tool';
-                    break;
-                  case SETTINGS:
-                    iconName = 'setting';
-                    break;
-
-                  default:
-                    iconName = 'home';
-                    break;
-                }
-
-                return <Icon name={iconName} size={size - 5} color={color} />;
-              },
-              tabBarActiveTintColor: 'tomato',
-              tabBarInactiveTintColor: 'gray',
-              tabBarItemStyle: {paddingVertical: 4},
-              headerShown: false,
-            })}>
-            <Tab.Screen name={HOME} component={HomeScreen} />
-            <Tab.Screen name={FILE_VIEWER} component={FileViewer} />
-            <Tab.Screen name={TOOLS} component={Tools} />
-            <Tab.Screen name={SETTINGS} component={Settings} />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
+      <Provider store={store}>
+        <MenuProvider>
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <Stack.Navigator>
+                <Stack.Screen
+                  name={MAIN_SCREENS}
+                  component={MainScreens}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name={SEARCH_PAGE}
+                  component={SearchPage}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name={FILES_BY_FORMAT}
+                  component={FileByFormat}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name={VIEWER}
+                  component={Viewer}
+                  options={{headerShown: false}}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </MenuProvider>
+      </Provider>
     </PaperProvider>
   );
 }

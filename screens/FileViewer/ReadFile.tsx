@@ -7,6 +7,7 @@ import {PDFDocument, StandardFonts} from 'pdf-lib';
 import {getPage} from '../func';
 import {Button} from 'react-native-paper';
 import XLSX from 'xlsx';
+import {VIEWER} from '../../components/constants/page';
 
 // import RNHTMLtoPDF from 'react-native-html-to-pdf'
 // import mammoth from 'mammoth';
@@ -24,23 +25,20 @@ function base64ToArrayBuffer(data: any) {
   return bytes.buffer; // Chuyển đổi thành ArrayBuffer
 }
 
-export function ReadMobileFile({callback}: any) {
+export function ReadMobileFile({navigation}: any) {
   const onPress = async () => {
     try {
-      // console.log('DocumentPicker :>> ', DocumentPicker);
       const res: any = await DocumentPicker.pickSingle({
         type: [types.allFiles],
         presentationStyle: 'fullScreen',
         copyTo: 'cachesDirectory',
       });
-
-      // console.log('res :>> ', res);
-      callback && callback(res);
+      navigation.navigate(VIEWER, {file: res});
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
-        console.log('User canceled!');
+        // console.log('User canceled!');
       } else {
-        console.log('ReadFile error', err);
+        // console.log('ReadFile error', err);
       }
     }
   };
@@ -65,7 +63,6 @@ export function ReadMobileFile({callback}: any) {
 
     const pdfBytes = await pdfDoc.saveAsBase64();
     console.log('pdfBytes :>> ', pdfBytes);
-    callback && callback(pdfBytes);
 
     // // get a list of files and directories in the main bundle
     // RNFS.readDir(RNFS.DocumentDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
@@ -91,7 +88,6 @@ export function ReadMobileFile({callback}: any) {
     //   // })
     //   .then(contents => {
     //     console.log('base64 file :>> ', contents);
-    //     callback && callback(contents);
     //   })
     //   .catch(err => {
     //     console.log('err', err.message, err);
