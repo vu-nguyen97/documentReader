@@ -8,7 +8,6 @@ const PdfViewer = props => {
   const {handleBack, file} = props;
 
   console.log('file :>> ', file);
-  const openMoreAction = () => {};
 
   return (
     <View style={{flex: 1}}>

@@ -11,7 +11,7 @@ import {Appbar} from 'react-native-paper';
 import XLSX from 'xlsx';
 import {DataTable} from 'react-native-paper';
 import RNFS from 'react-native-fs';
-import {MORE_ICON} from '../../../components/common/Helpers/UIHelpers';
+import {getFileName} from '../../../components/common/Helpers/Helpers';
 import Loading from '../../../components/common/Loading/Loading';
 import {LOAD_FILE} from '../../../components/constants/constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -108,8 +108,6 @@ export default function ExcelViewer(props) {
     setColumnWidths(widths);
   }, [tableData]);
 
-  const openMoreAction = () => {};
-
   if (isLoading) return <Loading text={LOAD_FILE} />;
 
   return (
@@ -117,9 +115,7 @@ export default function ExcelViewer(props) {
       <ScrollView>
         <Appbar.Header style={styles.headerMenu}>
           <Appbar.BackAction onPress={handleBack} />
-          <Appbar.Content title="Title" />
-          <Appbar.Action icon="magnify" onPress={() => {}} />
-          <Appbar.Action icon={MORE_ICON} onPress={openMoreAction} />
+          <Appbar.Content title={getFileName(file.fileCopyUri)} />
         </Appbar.Header>
         {(tableData.length > 0 || tableHeaders.length > 0) && (
           <ScrollView horizontal={true} style={{marginBottom: 40}}>
