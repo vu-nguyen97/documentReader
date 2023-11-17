@@ -70,7 +70,8 @@ export const LIST_FILES = [
   {
     id: FILE_IDS.screenshot,
     name: 'Screenshot',
-    format: 'jpg, png',
+    format: ' ',
+    // format: 'jpg, png',
     iconEl: <Icon3 name="camera" size={iconSize - 4} color="#008000" />,
     bgStart: 'rgba(0, 128, 0, 0.3)',
     bgEnd: 'rgba(0, 128, 0, 0.1)',

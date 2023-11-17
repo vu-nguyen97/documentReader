@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {MD2Colors, useTheme, Icon} from 'react-native-paper';
 // import Icon1 from 'react-native-vector-icons/FontAwesome5';
@@ -17,6 +18,7 @@ import Empty from '../../components/common/Empty/Empty';
 import {useSelector} from 'react-redux';
 import {getFileTime, viewFile} from '../../components/common/Helpers/Helpers';
 import {getFileIcon} from '../../components/common/Helpers/UIHelpers';
+import Star from '../../components/common/Star/Star';
 
 const CardData = [
   {
@@ -45,6 +47,8 @@ const CardData = [
 const Home = ({navigation}) => {
   const theme = useTheme();
   const recentFileState = useSelector(state => state.files.recent);
+  const starState = useSelector(state => state.files.stars);
+
   const [listCards, setListCards] = useState(CardData);
   const [recentFiles, setRecentFiles] = useState([]);
 
@@ -54,6 +58,7 @@ const Home = ({navigation}) => {
         ...el,
         time: getFileTime(el.time),
         icon: getFileIcon(el.path),
+        star: starState.some(file => file.path === el.path),
       };
     });
     setRecentFiles(newData);
@@ -77,7 +82,10 @@ const Home = ({navigation}) => {
   return (
     <ScrollView style={{padding: 16}}>
       <SearchBar navigation={navigation} />
-      <ScrollView horizontal={true} style={styles.listCards}>
+      <ScrollView
+        horizontal={true}
+        style={styles.listCards}
+        key={listCards.length}>
         {listCards.map((el, id) => (
           <View style={styles.card} key={id}>
             <Icon source={el.icon} size={30} color={MD2Colors.blue700} />
@@ -113,21 +121,29 @@ const Home = ({navigation}) => {
         {recentFiles?.length > 0 ? (
           <View style={styles.recentFiles}>
             {recentFiles.map((el, id) => (
-              <TouchableOpacity
-                onPress={() => onPressFile(el)}
-                style={styles.fileRow}
-                key={id}>
+              <View style={styles.fileRow} key={id}>
                 <View style={styles.fileDetail}>
                   {el.icon}
-                  <View style={{paddingLeft: 14}}>
-                    <Text style={{fontWeight: 'bold'}}>{el.name}</Text>
+                  <TouchableOpacity
+                    style={{paddingLeft: 14, flex: 1}}
+                    onPress={() => onPressFile(el)}>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={{
+                        fontWeight: 'bold',
+                        width: Dimensions.get('window').width - 160,
+                      }}>
+                      {el.name}
+                    </Text>
                     <Text>
                       {el.time} . {el.size}
                     </Text>
-                  </View>
+                  </TouchableOpacity>
+                  <Star file={el} />
                 </View>
                 {/* <Icon4 name="ellipsis-vertical-sharp" size={20} /> */}
-              </TouchableOpacity>
+              </View>
             ))}
           </View>
         ) : (

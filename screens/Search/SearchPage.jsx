@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../components/constants/colors';
@@ -100,7 +101,14 @@ export default function SearchPage(props) {
                   key={id}>
                   <View style={styles.fileDetail}>
                     {getFileIcon(el)}
-                    <Text style={{fontWeight: 'bold', marginLeft: 10}}>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={{
+                        fontWeight: 'bold',
+                        marginLeft: 10,
+                        width: Dimensions.get('window').width - 90,
+                      }}>
                       {el}
                     </Text>
                   </View>
