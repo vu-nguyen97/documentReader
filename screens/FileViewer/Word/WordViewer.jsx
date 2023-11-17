@@ -3,7 +3,7 @@ import {StyleSheet, Dimensions, View} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import Loading from '../../../components/common/Loading/Loading';
 import {LOAD_FILE} from '../../../components/constants/constants';
-import {MORE_ICON} from '../../../components/common/Helpers/UIHelpers';
+import {getFileName} from '../../../components/common/Helpers/Helpers';
 import Pdf from 'react-native-pdf';
 import RNFS from 'react-native-fs';
 import mammoth from 'mammoth';
@@ -70,17 +70,13 @@ export default function WordViewer(props) {
     setDocxConvertFilePath(path);
   };
 
-  const openMoreAction = () => {};
-
   if (isLoading) return <Loading text={LOAD_FILE} />;
 
   return (
     <View style={{flex: 1}}>
       <Appbar.Header style={styles.headerMenu}>
         <Appbar.BackAction onPress={handleBack} />
-        <Appbar.Content title="Title" />
-        <Appbar.Action icon="magnify" onPress={() => {}} />
-        <Appbar.Action icon={MORE_ICON} onPress={openMoreAction} />
+        <Appbar.Content title={getFileName(file.fileCopyUri)} />
       </Appbar.Header>
       <Pdf
         source={{uri: docxConvertFilePath, cache: false}}
