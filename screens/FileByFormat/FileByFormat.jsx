@@ -29,6 +29,8 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
+import {SheetManager} from 'react-native-actions-sheet';
+import {SHEETS} from '../../components/constants/sheets';
 
 const MenuAction = {
   open: 1,
@@ -49,7 +51,12 @@ const MenuData = [
     value: MenuAction.rename,
     icon: 'file-edit-outline',
   },
-  {text: 'Detail', value: MenuAction.detail, icon: 'information-outline'},
+  {
+    text: 'Detail',
+    value: MenuAction.detail,
+    icon: 'information-outline',
+    enable: true,
+  },
   {text: 'Share', value: MenuAction.share, icon: 'share-variant-outline'},
   {
     text: 'Delete',
@@ -123,6 +130,9 @@ export default function FileByFormat(props) {
     switch (value) {
       case MenuAction.open:
         return viewFile(file.path, navigation);
+      case MenuAction.detail:
+        SheetManager.show(SHEETS.detailFile, {payload: file});
+        return;
 
       default:
         break;

@@ -17,6 +17,8 @@ import {Provider} from 'react-redux';
 import store from './components/redux/store';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {MenuProvider} from 'react-native-popup-menu';
+import {SheetProvider} from 'react-native-actions-sheet';
+import './screens/Sheets/Sheets';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,32 +36,34 @@ function App() {
     <PaperProvider theme={theme}>
       <Provider store={store}>
         <MenuProvider>
-          <SafeAreaProvider>
-            <NavigationContainer>
-              <Stack.Navigator>
-                <Stack.Screen
-                  name={MAIN_SCREENS}
-                  component={MainScreens}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen
-                  name={SEARCH_PAGE}
-                  component={SearchPage}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen
-                  name={FILES_BY_FORMAT}
-                  component={FileByFormat}
-                  options={{headerShown: false}}
-                />
-                <Stack.Screen
-                  name={VIEWER}
-                  component={Viewer}
-                  options={{headerShown: false}}
-                />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </SafeAreaProvider>
+          <SheetProvider>
+            <SafeAreaProvider>
+              <NavigationContainer>
+                <Stack.Navigator>
+                  <Stack.Screen
+                    name={MAIN_SCREENS}
+                    component={MainScreens}
+                    options={{headerShown: false}}
+                  />
+                  <Stack.Screen
+                    name={SEARCH_PAGE}
+                    component={SearchPage}
+                    options={{headerShown: false}}
+                  />
+                  <Stack.Screen
+                    name={FILES_BY_FORMAT}
+                    component={FileByFormat}
+                    options={{headerShown: false}}
+                  />
+                  <Stack.Screen
+                    name={VIEWER}
+                    component={Viewer}
+                    options={{headerShown: false}}
+                  />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </SafeAreaProvider>
+          </SheetProvider>
         </MenuProvider>
       </Provider>
     </PaperProvider>
