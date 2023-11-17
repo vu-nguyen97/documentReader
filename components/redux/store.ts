@@ -2,9 +2,11 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {useDispatch} from 'react-redux';
 
 import filesSlice from './files/files';
+import appSlice from './app/app';
 
 const appReducer = combineReducers({
   files: filesSlice,
+  app: appSlice,
 });
 
 const store = configureStore({
