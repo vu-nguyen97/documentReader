@@ -24,6 +24,8 @@ import {SheetManager} from 'react-native-actions-sheet';
 import {SHEETS} from './components/constants/sheets';
 import {useDispatch} from 'react-redux';
 import {updateFilePermission} from './components/redux/app/app';
+import {PersistGate} from 'redux-persist/integration/react';
+import {persistStore} from 'redux-persist';
 
 const {PermissionModule} = NativeModules;
 const Stack = createNativeStackNavigator();
@@ -38,10 +40,14 @@ const theme = {
 };
 
 function App() {
+  let persistor = persistStore(store);
+
   return (
     <PaperProvider theme={theme}>
       <Provider store={store}>
-        <AppNavigation />
+        <PersistGate loading={null} persistor={persistor}>
+          <AppNavigation />
+        </PersistGate>
       </Provider>
     </PaperProvider>
   );

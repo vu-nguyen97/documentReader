@@ -16,11 +16,14 @@ import {getFileName, viewFile} from '../../components/common/Helpers/Helpers';
 import {getFileIcon} from '../../components/common/Helpers/UIHelpers';
 import empty from '../../components/assets/images/empty.png';
 import {getAllFiles} from '../../components/common/Helpers/Helpers';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {updateFiles} from '../../components/redux/files/files';
 
 export default function SearchPage(props) {
   const inputRef = useRef(null);
+  const dispatch = useDispatch();
   const filePermission = useSelector(state => state.app.filePermission);
+  const filesState = useSelector(state => state.files.files);
 
   const {navigation} = props;
 
@@ -42,7 +45,12 @@ export default function SearchPage(props) {
 
   useEffect(() => {
     if (!filePermission) return;
-    getAllFiles().then(files => setAllFiles(files));
+    if (filesState?.length) return setAllFiles(filesState);
+
+    getAllFiles().then(files => {
+      setAllFiles(files);
+      dispatch(updateFiles(files));
+    });
   }, [filePermission]);
 
   // const performSearch = async text => {
