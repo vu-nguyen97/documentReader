@@ -8,16 +8,23 @@ export interface File {
   location?: string;
 }
 
+interface MiniFile {
+  path: string;
+  size: string;
+}
+
 interface RecentFile {
   maxRecentFiles: number;
   recent: File[];
   stars: File[];
+  files: string[];
 }
 
 const initialData: RecentFile = {
   maxRecentFiles: 20,
   recent: [],
   stars: [],
+  files: [],
 };
 
 export const filesSlice = createSlice({
@@ -48,9 +55,12 @@ export const filesSlice = createSlice({
         state.stars.push(payload);
       }
     },
+    updateFiles: (state, {payload}) => {
+      state.files = payload;
+    },
   },
 });
 
-export const {updateRecentFiles, updateStar} = filesSlice.actions;
+export const {updateRecentFiles, updateStar, updateFiles} = filesSlice.actions;
 
 export default filesSlice.reducer;

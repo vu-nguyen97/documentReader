@@ -2,6 +2,7 @@ import moment from 'moment';
 import RNFS from 'react-native-fs';
 import {VIEWER} from '../../constants/page';
 import {FILE_TYPES} from '../../constants/constants';
+import {SUPPORTED_FORMATS} from '../../../screens/FileViewer/constants';
 
 export const viewFile = (fileName: string, navigation: any, allFiles: any) => {
   const activedPath = allFiles?.length
@@ -89,4 +90,41 @@ export const getFileLocation = (filePath: string) => {
   }
 
   return '';
+};
+
+export const getAllFiles = async () => {
+  return await getAllFilesFromDirectory(RNFS.ExternalStorageDirectoryPath).then(
+    allFiles => {
+      return allFiles.filter(el => {
+        const fileExtension = getFileExtension(el);
+        return fileExtension && SUPPORTED_FORMATS?.includes(fileExtension);
+      });
+    },
+  );
+};
+
+export const getAllFilesFromDirectory = async (directory: string) => {
+  try {
+    const files = await RNFS.readDir(directory);
+    const listPromises: Promise<any>[] = [];
+    const allFiles: string[] = [];
+
+    files.forEach(file => {
+      if (file.isFile()) {
+        allFiles.push(file.path);
+      } else if (file.isDirectory()) {
+        listPromises.push(getAllFilesFromDirectory(file.path));
+      }
+    });
+
+    const filesInFolders = await Promise.all([...listPromises]);
+    filesInFolders.forEach(res => {
+      if (res?.length) {
+        allFiles.push(...res);
+      }
+    });
+    return allFiles;
+  } catch (error) {
+    return [];
+  }
 };

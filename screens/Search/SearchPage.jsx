@@ -7,17 +7,24 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../components/constants/colors';
-import PermissionsModal from '../../components/common/Permissions/PermissionsModal';
 import {throttle} from 'lodash';
 import {getFileName, viewFile} from '../../components/common/Helpers/Helpers';
 import {getFileIcon} from '../../components/common/Helpers/UIHelpers';
 import empty from '../../components/assets/images/empty.png';
+import {getAllFiles} from '../../components/common/Helpers/Helpers';
+import {useSelector, useDispatch} from 'react-redux';
+import {updateFiles} from '../../components/redux/files/files';
 
 export default function SearchPage(props) {
   const inputRef = useRef(null);
+  const dispatch = useDispatch();
+  const filePermission = useSelector(state => state.app.filePermission);
+  const filesState = useSelector(state => state.files.files);
+
   const {navigation} = props;
 
   const [allFiles, setAllFiles] = useState([]);
@@ -28,10 +35,6 @@ export default function SearchPage(props) {
     navigation.goBack();
   };
 
-  const updateFiles = files => {
-    setAllFiles(files);
-  };
-
   useEffect(() => {
     setTimeout(() => {
       if (inputRef.current) {
@@ -39,6 +42,16 @@ export default function SearchPage(props) {
       }
     }, 10);
   }, []);
+
+  useEffect(() => {
+    if (!filePermission) return;
+    if (filesState?.length) return setAllFiles(filesState);
+
+    getAllFiles().then(files => {
+      setAllFiles(files);
+      dispatch(updateFiles(files));
+    });
+  }, [filePermission]);
 
   // const performSearch = async text => {
   //   console.log('filter', text);
@@ -96,7 +109,14 @@ export default function SearchPage(props) {
                   key={id}>
                   <View style={styles.fileDetail}>
                     {getFileIcon(el)}
-                    <Text style={{fontWeight: 'bold', marginLeft: 10}}>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={{
+                        fontWeight: 'bold',
+                        marginLeft: 10,
+                        width: Dimensions.get('window').width - 90,
+                      }}>
                       {el}
                     </Text>
                   </View>
@@ -122,8 +142,6 @@ export default function SearchPage(props) {
           </View>
         )}
       </ScrollView>
-
-      <PermissionsModal navigation={navigation} updateFiles={updateFiles} />
     </View>
   );
 }

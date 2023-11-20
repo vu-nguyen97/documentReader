@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   Image,
+  Dimensions,
 } from 'react-native';
 import {getFileIcon} from '../../components/common/Helpers/UIHelpers';
 import {
@@ -20,8 +21,7 @@ import {COLORS} from '../../components/constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNFS from 'react-native-fs';
-import {useSelector, useDispatch} from 'react-redux';
-import {updateStar} from '../../components/redux/files/files';
+import {useSelector} from 'react-redux';
 import fileEmpty from '../../components/assets/images/file-empty.png';
 import {
   Menu,
@@ -29,6 +29,9 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
+import {SheetManager} from 'react-native-actions-sheet';
+import {SHEETS} from '../../components/constants/sheets';
+import Star from '../../components/common/Star/Star';
 
 const MenuAction = {
   open: 1,
@@ -49,7 +52,12 @@ const MenuData = [
     value: MenuAction.rename,
     icon: 'file-edit-outline',
   },
-  {text: 'Detail', value: MenuAction.detail, icon: 'information-outline'},
+  {
+    text: 'Detail',
+    value: MenuAction.detail,
+    icon: 'information-outline',
+    enable: true,
+  },
   {text: 'Share', value: MenuAction.share, icon: 'share-variant-outline'},
   {
     text: 'Delete',
@@ -60,7 +68,6 @@ const MenuData = [
 ];
 
 export default function FileByFormat(props) {
-  const dispatch = useDispatch();
   const starState = useSelector(state => state.files.stars);
 
   const {navigation, route} = props;
@@ -115,14 +122,13 @@ export default function FileByFormat(props) {
     viewFile(el.path, navigation);
   };
 
-  const toggleStar = file => {
-    dispatch(updateStar(file));
-  };
-
   const onSelectMenu = (file, value) => {
     switch (value) {
       case MenuAction.open:
         return viewFile(file.path, navigation);
+      case MenuAction.detail:
+        SheetManager.show(SHEETS.detailFile, {payload: file});
+        return;
 
       default:
         break;
@@ -173,22 +179,20 @@ export default function FileByFormat(props) {
                 style={styles.fileDetail}
                 onPress={() => onPressFile(el)}>
                 {getFileIcon(el.path)}
-                <Text style={{fontWeight: 'bold', marginLeft: 10}}>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{
+                    fontWeight: 'bold',
+                    marginLeft: 10,
+                    width: Dimensions.get('window').width - 180,
+                  }}>
                   {el.name}
                 </Text>
               </TouchableOpacity>
 
               <View style={styles.icons}>
-                <TouchableOpacity
-                  onPress={() => toggleStar(el)}
-                  style={{marginRight: 10}}>
-                  {el.star ? (
-                    <Icon name="heart-sharp" size={22} color="#ff2121" />
-                  ) : (
-                    <Icon name="heart-outline" size={22} />
-                  )}
-                </TouchableOpacity>
-
+                <Star file={el} />
                 <Menu onSelect={v => onSelectMenu(el, v)}>
                   <MenuTrigger>
                     <Icon name="ellipsis-vertical-sharp" size={20} />
