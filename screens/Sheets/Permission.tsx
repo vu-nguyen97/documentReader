@@ -23,12 +23,17 @@ import {Button} from 'react-native-paper';
 import {useChangeScreen} from '../../components/common/Hooks/Hooks';
 import {useDispatch} from 'react-redux';
 import {updateFilePermission} from '../../components/redux/app/app';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../components/redux/store';
 
 const {PermissionModule} = NativeModules;
 
 function Permission(props: SheetProps<any>) {
   const {sheetId, payload} = props;
   const dispatch = useDispatch();
+  const permission = useSelector(
+    (state: RootState) => state.app.filePermission,
+  );
   const actionSheetRef = useRef<ActionSheetRef>(null);
   const scrollHandlers = useScrollHandlers<ScrollView>('1', actionSheetRef);
 
@@ -52,7 +57,7 @@ function Permission(props: SheetProps<any>) {
     <ActionSheet
       id={sheetId}
       ref={actionSheetRef}
-      closable={false}
+      closable={permission}
       gestureEnabled={true}>
       <View style={{paddingHorizontal: 12, maxHeight: '100%'}}>
         <ScrollView {...scrollHandlers} style={styles.scrollview}>
@@ -75,7 +80,7 @@ function Permission(props: SheetProps<any>) {
             </Text>
             <Icon
               name="toggle-switch"
-              size={38}
+              size={48}
               color="#3b82f6"
               style={{marginLeft: 6}}
             />
@@ -132,9 +137,9 @@ const styles = StyleSheet.create({
   },
   handIcon: {
     position: 'absolute',
-    bottom: '-24%',
+    bottom: '-16%',
     right: '50%',
-    transform: [{translateX: 130}, {skewY: '-13deg'}],
+    transform: [{translateX: 138}, {skewY: '-13deg'}],
   },
 });
 
