@@ -21,7 +21,10 @@ export const viewFile = (fileName: string, navigation: any, allFiles: any) => {
       type = FILE_TYPES.word;
       break;
     case 'xlsx':
-      type = FILE_TYPES.excel;
+      type = FILE_TYPES.xlsx;
+      break;
+    case 'xls':
+      type = FILE_TYPES.xls;
       break;
 
     default:

@@ -96,6 +96,9 @@ const checkFile = (file, handleBack, setFile) => {
     case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
       ViewerComp = <ExcelViewer {...viewerProps} />;
       break;
+    case 'application/vnd.ms-excel':
+      ViewerComp = <ExcelViewer {...viewerProps} />;
+      break;
     case 'application/zip':
       ViewerComp = <ZipViewer {...viewerProps} />;
       break;

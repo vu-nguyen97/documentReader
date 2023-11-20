@@ -20,7 +20,8 @@ export const FILE_TYPES = {
   pdf: 'application/pdf',
   txt: 'text/plain',
   word: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  excel: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  xls: 'application/vnd.ms-excel',
   zip: 'application/zip',
   rar: 'application/rar',
 };

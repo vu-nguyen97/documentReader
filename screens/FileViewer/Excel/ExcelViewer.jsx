@@ -20,7 +20,18 @@ function getHeaderRow(workSheet) {
   const headers = [];
   const range = XLSX.utils.decode_range(workSheet['!ref'] ?? '');
   const row = 0;
-  for (let col = 0; col <= range.e.c; ++col) {
+  let maxCol = 0;
+
+  for (let row = 0; row <= range.e.r; row++) {
+    for (let col = 0; col <= range.e.c; col++) {
+      const cell = workSheet[XLSX.utils.encode_cell({c: col, r: row})];
+      if (cell && cell.t) {
+        maxCol = Math.max(maxCol, col);
+      }
+    }
+  }
+
+  for (let col = 0; col <= maxCol; ++col) {
     const cell = workSheet[XLSX.utils.encode_cell({c: col, r: row})];
     const header = cell && cell.t ? XLSX.utils.format_cell(cell) : 'unknown';
     if (header != 'unknown') headers[col] = header;
@@ -132,7 +143,9 @@ export default function ExcelViewer(props) {
                           width: columnWidths[index],
                         },
                       ]}>
-                      {header}
+                      <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                        {header}
+                      </Text>
                     </DataTable.Title>
                   ))}
                 </DataTable.Header>
@@ -186,7 +199,7 @@ export default function ExcelViewer(props) {
                   <TouchableOpacity
                     style={[
                       styles.sheetButton,
-                      {borderColor: 'blue', backgroundColor: 'lightblue'},
+                      {borderWidth: 1.5, backgroundColor: '#c6d7a8'},
                     ]}
                     key={index}
                     onPress={() => {
@@ -228,7 +241,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   tableHeaders: {
-    backgroundColor: 'lightblue',
+    backgroundColor: '#b6d7a8',
     fontSize: 20,
     fontWeight: 'bold',
     paddingHorizontal: 8,
