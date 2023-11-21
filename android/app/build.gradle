@@ -168,7 +168,7 @@ dependencies {
 //    implementation("e-iceblue:spire.doc:11.9.5")
 
 
-
+    implementation files('libs\\aspose-words-23.9.0-android.via.java.jar')
     implementation project(':react-native-file-viewer')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
