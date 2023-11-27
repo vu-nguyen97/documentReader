@@ -119,7 +119,8 @@ export default function FileByFormat(props) {
   };
 
   const onPressFile = el => {
-    viewFile(el.path, navigation);
+    console.log('el.path :>> ', el.path);
+    // viewFile(el.path, navigation);
   };
 
   const onSelectMenu = (file, value) => {

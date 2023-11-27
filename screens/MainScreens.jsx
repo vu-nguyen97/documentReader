@@ -36,9 +36,9 @@ export default function MainScreens() {
         tabBarItemStyle: {paddingVertical: 4},
         headerShown: false,
       })}>
+      <Tab.Screen name={TOOLS} component={Tools} />
       <Tab.Screen name={HOME} component={HomeScreen} />
       <Tab.Screen name={FILES} component={FileViewer} />
-      <Tab.Screen name={TOOLS} component={Tools} />
       {/* <Tab.Screen name={SETTINGS} component={Settings} /> */}
     </Tab.Navigator>
   );

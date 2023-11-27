@@ -63,35 +63,6 @@ export function ReadMobileFile({navigation}: any) {
 
     const pdfBytes = await pdfDoc.saveAsBase64();
     console.log('pdfBytes :>> ', pdfBytes);
-
-    // // get a list of files and directories in the main bundle
-    // RNFS.readDir(RNFS.DocumentDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
-    //   .then(result => {
-    //     console.log('GOT RESULT', result);
-    //     // stat the first file
-    //     return Promise.all([RNFS.stat(result[1].path), result[1].path]);
-    //   })
-    //   .then(statResult => {
-    //     console.log('statResult :>> ', statResult);
-    //     if (statResult[0].isFile()) {
-    //       // if we have a file, read it
-    //       return RNFS.readFile(statResult[1], 'base64');
-    //       // return Promise.all([
-    //       //   statResult[1],
-    //       //   RNFS.stat(statResult[1]),
-    //       //   RNFS.write(statResult[1], 'VU_Nguyen_DEVVVVVVVVV', -1),
-    //       // ]);
-    //     }
-    //   })
-    //   // .then((fileContent: any) => {
-    //   //   return RNFS.readFile(fileContent[0], 'base64');
-    //   // })
-    //   .then(contents => {
-    //     console.log('base64 file :>> ', contents);
-    //   })
-    //   .catch(err => {
-    //     console.log('err', err.message, err);
-    //   });
   };
 
   return (
