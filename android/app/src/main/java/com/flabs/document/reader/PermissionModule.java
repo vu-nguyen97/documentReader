@@ -12,11 +12,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.flipper.plugins.databases.ObjectMapper;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +36,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFStyle;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTShd;
 
 public class PermissionModule extends ReactContextBaseJavaModule {
     private static final int EXTERNAL_STORAGE_CODE = 10;
@@ -195,7 +205,67 @@ public class PermissionModule extends ReactContextBaseJavaModule {
 
 
     @ReactMethod
-    public void viewFile(Promise promise) {
+    public void viewFile(String path, Promise promise) {
 //        webview.LoadUrl(XUI.FileUri(DirPath, FileName));
+        List<StyleInfo> styleInfoList = new ArrayList<>();
+
+        try (FileInputStream fis = new FileInputStream(new File(path));
+             XWPFDocument document = new XWPFDocument(fis)) {
+            int paragraphIndex = 0;
+
+            // Lặp qua tất cả các đoạn văn bản trong tài liệu
+            for (XWPFParagraph paragraph : document.getParagraphs()) {
+                boolean paragraphIsBold = false;
+                boolean paragraphIsItalic = false;
+
+                // Lặp qua các run trong đoạn văn bản
+                for (XWPFRun run : paragraph.getRuns()) {
+                    paragraphIsBold = paragraphIsBold || run.isBold();
+                    paragraphIsItalic = paragraphIsItalic || run.isItalic();
+                }
+                ++paragraphIndex;
+
+                // Lưu thông tin kiểu vào danh sách
+                StyleInfo styleInfo = new StyleInfo(paragraphIsBold, paragraphIsItalic, paragraphIndex);
+                styleInfoList.add(styleInfo);
+            }
+            promise.resolve(Arguments.fromList(styleInfoList));
+//            promise.resolve(styleInfoList.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            promise.resolve(e.getMessage());
+        }
+
+    }
+
+    public static class StyleInfo {
+        private boolean isBold;
+        private boolean isItalic;
+        private Integer index;
+
+        public StyleInfo(boolean isBold, boolean isItalic, Integer index) {
+            this.isBold = isBold;
+            this.isItalic = isItalic;
+            this.index = index;
+        }
+
+        public boolean isBold() {
+            return isBold;
+        }
+
+        public boolean isItalic() {
+            return isItalic;
+        }
+
+        public Integer getIndex() {
+            return index;
+        }
+
+        @Override
+        public String toString() {
+            return  "isBold:" + isBold +
+                    ", isItalic:" + isItalic +
+                    ", index:" + getIndex();
+        }
     }
 }

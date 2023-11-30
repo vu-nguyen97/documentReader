@@ -8,8 +8,15 @@ import {encode} from 'base-64';
 import {WebView} from 'react-native-webview';
 import loading from '../../components/assets/files/loading.json';
 import LottieView from 'lottie-react-native';
+// const mupdf = require('mupdf');
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
 
 const {PermissionModule} = NativeModules;
+GoogleSignin.configure({
+  webClientId: '', // xin or tạo YOUR_WEB_CLIENT_ID
+  offlineAccess: true,
+});
 
 const Tools = () => {
   // const [renderedOnce, setRenderedOnce] = useState(false);
@@ -24,11 +31,25 @@ const Tools = () => {
     return fn().then(onPromiseDone, onPromiseDone);
   }
 
+  useEffect(() => {
+    // GoogleSignin.configure();
+    // console.log('?????');
+    // await GoogleSignin.hasPlayServices();
+    // const userInfo = await GoogleSignin.signIn();
+    // const accessToken = userInfo.accessToken;
+  }, []);
+
   const onCheck = async () => {
-    console.log('PermissionModule :>> ', PermissionModule);
-    PermissionModule.readExcelNew(
-      '/storage/emulated/0/Download/Excel.xlsx',
-    ).then(
+    // console.log('PermissionModule :>> ', PermissionModule);
+    // PermissionModule.readExcelNew(
+    //   '/storage/emulated/0/Download/Excel.xlsx',
+    // ).then(
+    //   res => {
+    //     console.log('res :>> ', res);
+    //   },
+    //   err => console.log('err :>> ', err),
+    // );
+    PermissionModule.viewFile('/storage/emulated/0/Download/test2.docx').then(
       res => {
         console.log('res :>> ', res);
       },
@@ -89,6 +110,17 @@ const Tools = () => {
       <Text>Zoom</Text>
 
       <Button onPress={onCheck}>Check</Button>
+      {/* Not working */}
+      {/* <GoogleSigninButton
+        style={{width: 312, height: 48}}
+        // size={GoogleSigninButton.Size.Wide}
+        // color={GoogleSigninButton.Color.Dark}
+        onPress={() => {
+          // initiate sign in
+          console.log('onPress');
+        }}
+        // disabled={isInProgress}
+      /> */}
     </View>
   );
 

@@ -124,6 +124,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation project(':react-native-fs')
     implementation files('..\\libs\\aspose-words-23.9.0-android.via.java.jar')
+    implementation files('..\\libs\\lib-release.aar')
 
     implementation 'com.tom-roush:pdfbox-android:2.0.27.0'
     implementation("org.apache.poi:poi:5.2.3")
@@ -144,3 +145,4 @@ dependencies {
 
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply plugin: 'com.google.gms.google-services'
